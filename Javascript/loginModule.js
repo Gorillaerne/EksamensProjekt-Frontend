@@ -68,7 +68,7 @@ export function createLoginModule() {
 
         try {
             const res = await authorizedFetch(
-                "http://localhost:8080/api/auth/login",
+                "http://localhost:8080/api/users/login",
                 {
                     method: "POST",
                     body: JSON.stringify(loginPayload)
