@@ -1,5 +1,6 @@
 import {createWarehouseModule} from "./createWarehouseModule.js";
+import {createProductTransferModule} from "./moveProductToWarehouseModule.js";
 
 const app = document.getElementById("app")
 
-app.appendChild(createWarehouseModule())
+app.appendChild(createProductTransferModule())
