@@ -91,6 +91,10 @@ export function createLoginModule() {
             msg.textContent = "Login succes!";
             msg.className = "lm-message lm-success";
 
+            setTimeout(() => {
+                location.reload();
+            }, 300);
+
         } catch (err) {
             msg.textContent = "Netværksfejl – kunne ikke logge ind.";
             msg.className = "lm-message lm-error";

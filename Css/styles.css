@@ -1,3 +1,45 @@
+body{
+    padding: 0;
+    margin: 0;
+}
+
+/* FULLSCREEN BACKDROP */
+.lp-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.45);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999; /* always on top */
+    backdrop-filter: blur(4px);
+}
+
+/* THE LOGIN MODULE INSIDE THE OVERLAY */
+.lp-overlay-box {
+    background: #FCFAF6;
+    padding: 30px;
+    border-radius: 14px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    max-width: 420px;
+    width: 90%;
+    animation: fadeInUp 0.35s ease;
+}
+
+/* ANIMATION */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 /*****************************
   PRODUCT MODULE — MODERN 2025
 ******************************/
@@ -270,5 +312,174 @@ LOGIN MODULE — MODERN 2025
 
     .lm-title {
         font-size: 24px;
+    }
+}
+/***************************
+  LANDING PAGE — ELVANG
+****************************/
+
+:root {
+    --elvang-brun: #E0DACF;
+    --elvang-hvid: #FCFAF6;
+    --text-dark: #1a1a1a;
+    --text-mid: #333;
+}
+
+.lp-wrapper {
+    font-family: "Inter", sans-serif;
+    color: var(--text-dark);
+    background: var(--elvang-hvid);
+}
+
+
+/* HEADER */
+.lp-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 60px;
+    font-size: 20px;
+    background: var(--elvang-brun);
+}
+.lp-logo {
+    height:120px;
+    width: auto;
+    object-fit: cover;
+    object-position: center;
+}
+
+
+.lp-nav-btn,
+.lp-login-btn {
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 8px 18px;
+    border-radius: 10px;
+    transition: 0.25s;
+    user-select: none;
+}
+
+/* Logged-in (Dashboard) button — subtle */
+.lp-nav-btn {
+    color: #333;
+}
+
+.lp-nav-btn:hover {
+    color: #000;
+    transform: translateY(-1px);
+}
+
+/* Logged-out (Login) button — more visible CTA */
+.lp-login-btn {
+    background: #E0DACF;          /* your brunlige color */
+    border: 1px solid #d4cdc2;
+    color: #1a1a1a;
+}
+
+.lp-login-btn:hover {
+    background: #d7d0c4;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+}
+
+
+/* HERO SECTION */
+.lp-hero {
+    margin: 40px auto 0px auto;
+    max-width: 900px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    background: var(--elvang-brun);
+    border: 1px solid var(--elvang-brun);
+}
+
+.lp-hero-left {
+    padding: 50px 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.lp-hero-left h1 {
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+.lp-hero-left p {
+    font-size: 16px;
+    font-style: italic;
+}
+
+.lp-hero-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* STORY SECTION */
+.lp-story {
+    max-width: 900px;
+    margin: 0 auto 70px auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background: var(--elvang-brun);
+    border: 1px solid var(--elvang-brun);
+}
+
+.lp-story-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.lp-story-text {
+    padding: 40px;
+    line-height: 1.6;
+    font-size: 15px;
+}
+
+/* FOOTER */
+.lp-footer {
+    margin-top: 40px;
+    background: var(--elvang-brun);
+    padding: 40px 60px;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 40px;
+    border-top: 2px solid #d2cbbf;
+}
+
+.lp-footer-col h4 {
+    font-size: 17px;
+    margin-bottom: 20px;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.lp-footer-col p {
+    margin: 6px 0;
+    color: var(--text-mid);
+    cursor: pointer;
+}
+
+.lp-footer-col p:hover {
+    text-decoration: underline;
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+    .lp-hero,
+    .lp-story {
+        grid-template-columns: 1fr;
+    }
+
+    .lp-header {
+        padding: 20px 30px;
+    }
+
+    .lp-footer {
+        grid-template-columns: 1fr 1fr;
     }
 }
