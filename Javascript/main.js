@@ -1,8 +1,6 @@
-import {createWarehouseModule} from "./createWarehouseModule.js";
-import {createProductTransferModule} from "./moveProductToWarehouseModule.js";
-import {createLandingPage} from "./landingPageModule.js";
-import {createLowQuantityListModule} from "./lowProductAlertModule.js";
+
+import {createHeader} from "./header.js";
 
 const app = document.getElementById("app")
 
-app.appendChild(createLowQuantityListModule())
+app.appendChild(await createHeader())
