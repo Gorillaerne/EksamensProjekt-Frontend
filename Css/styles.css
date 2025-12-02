@@ -20,13 +20,13 @@ body{
 
 /* THE LOGIN MODULE INSIDE THE OVERLAY */
 .lp-overlay-box {
-    background: #FCFAF6;
-    padding: 30px;
+    background: #ffffff;
+    padding: 5vh;
     border-radius: 14px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    max-width: 420px;
-    width: 90%;
+    max-width: 90%;
     animation: fadeInUp 0.35s ease;
+
 }
 
 /* ANIMATION */
