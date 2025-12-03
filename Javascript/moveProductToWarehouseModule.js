@@ -3,27 +3,27 @@ import { authorizedFetch } from "./ReusableFunctions.js";
 export function createProductTransferModule() {
 
     const wrapper = document.createElement("div");
-    wrapper.classList.add("wm-form");
+    wrapper.classList.add("m-form");
 
     const title = document.createElement("h2");
     title.textContent = "Flyt produkt mellem lagre";
-    title.classList.add("wm-title");
+    title.classList.add("m-title");
     wrapper.appendChild(title);
 
     // CONTAINER
     const content = document.createElement("div");
-    content.classList.add("wm-fields-container");
+    content.classList.add("m-fields-container");
     wrapper.appendChild(content);
 
     function addField(labelText, el) {
         const field = document.createElement("div");
-        field.classList.add("wm-field");
+        field.classList.add("m-field");
 
         const label = document.createElement("label");
         label.textContent = labelText;
-        label.classList.add("wm-label");
+        label.classList.add("m-label");
 
-        el.classList.add("wm-input");
+        el.classList.add("m-input");
 
         field.appendChild(label);
         field.appendChild(el);
@@ -48,7 +48,7 @@ export function createProductTransferModule() {
 
     // 🚨 QUANTITY DISPLAY
     const stockBox = document.createElement("div");
-    stockBox.classList.add("wm-stock-display");
+    stockBox.classList.add("m-stock-display");
     stockBox.textContent = "Lagerbeholdning: -";
     content.appendChild(stockBox);
 
@@ -101,7 +101,7 @@ export function createProductTransferModule() {
             updateStockDisplay();
         } catch (err) {
             msg.textContent = "Kunne ikke hente data fra server.";
-            msg.className = "wm-message wm-error";
+            msg.className = "m-message m-error";
         }
     }
     loadData();
@@ -112,13 +112,13 @@ export function createProductTransferModule() {
 
     // MESSAGE BOX
     const msg = document.createElement("div");
-    msg.classList.add("pm-message");
+    msg.classList.add("m-message");
     wrapper.appendChild(msg);
 
     // SUBMIT BUTTON
     const submitBtn = document.createElement("button");
     submitBtn.textContent = "Flyt produkt";
-    submitBtn.classList.add("wm-submit");
+    submitBtn.classList.add("m-submit");
     wrapper.appendChild(submitBtn);
 
     submitBtn.addEventListener("click", async () => {
@@ -132,13 +132,13 @@ export function createProductTransferModule() {
 
         if (!request.productId || !request.fromWarehouseId || !request.toWarehouseId || !request.amount) {
             msg.textContent = "Udfyld alle felter.";
-            msg.className = "wm-message wm-error";
+            msg.className = "m-message m-error";
             return;
         }
 
         if (request.fromWarehouseId === request.toWarehouseId) {
             msg.textContent = "Fra og til lager må ikke være det samme.";
-            msg.className = "wm-message wm-error";
+            msg.className = "m-message m-error";
             return;
         }
 
@@ -152,19 +152,19 @@ export function createProductTransferModule() {
 
             if (!res.ok) {
                 msg.textContent = "Fejl: " + (await res.text());
-                msg.className = "wm-message wm-error";
+                msg.className = "m-message m-error";
                 return;
             }
 
             msg.textContent = "Produktet blev flyttet!";
-            msg.className = "wm-message wm-success";
+            msg.className = "m-message m-success";
 
             amountInput.value = "";
             updateStockDisplay(); // 🔄 Opdatér beholdning efter flytning
 
         } catch (err) {
             msg.textContent = "Netværksfejl – kunne ikke flytte produktet.";
-            msg.className = "wm-message wm-error";
+            msg.className = "m-message m-error";
         }
     });
 

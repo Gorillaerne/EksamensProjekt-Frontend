@@ -3,32 +3,32 @@ import { authorizedFetch } from "./ReusableFunctions.js";
 export function createWarehouseModule() {
 
     const wrapper = document.createElement("div");
-    wrapper.classList.add("wm-form");
+    wrapper.classList.add("m-form");
 
     const title = document.createElement("h2");
     title.textContent = "Opret varehus";
-    title.classList.add("wm-title");
+    title.classList.add("m-title");
     wrapper.appendChild(title);
 
     // FLEX ROW (fields left, preview right)
     const contentRow = document.createElement("div");
-    contentRow.classList.add("wm-content-row");
+    contentRow.classList.add("m-content-row");
     wrapper.appendChild(contentRow);
 
     // LEFT SIDE (fields)
     const fieldsContainer = document.createElement("div");
-    fieldsContainer.classList.add("wm-fields-container");
+    fieldsContainer.classList.add("m-fields-container");
     contentRow.appendChild(fieldsContainer);
 
     function addField(labelText, el) {
         const field = document.createElement("div");
-        field.classList.add("wm-field");
+        field.classList.add("m-field");
 
         const label = document.createElement("label");
         label.textContent = labelText;
-        label.classList.add("wm-label");
+        label.classList.add("m-label");
 
-        el.classList.add("wm-input");
+        el.classList.add("m-input");
 
         field.appendChild(label);
         field.appendChild(el);
@@ -48,53 +48,18 @@ export function createWarehouseModule() {
     addressInput.required = true;
     addField("Adresse", addressInput)
 
-    const picInput = document.createElement("input");
-    picInput.type = "file";
-    picInput.accept = "image/*";
-    picInput.classList.add("pm-file-input");
-    addField("Billede", picInput);
-
-    let encodedPicture = null;
-    const DEFAULT_IMAGE = "/pictures/missing picture.jpg";
-
-    // RIGHT SIDE (preview)
-    const previewContainer = document.createElement("div");
-    previewContainer.classList.add("wm-preview-container");
-    contentRow.appendChild(previewContainer);
-
-    const preview = document.createElement("img");
-    preview.src = DEFAULT_IMAGE;
-    preview.classList.add("wm-preview");
-    previewContainer.appendChild(preview);
-
-    // UPDATE PREVIEW
-    picInput.addEventListener("change", function () {
-        const file = picInput.files[0];
-        if (!file) {
-            preview.src = DEFAULT_IMAGE;
-            encodedPicture = null;
-            return;
-        }
-
-        const reader = new FileReader();
-        reader.onload = function (ev) {
-            encodedPicture = ev.target.result;
-            preview.src = encodedPicture;
-        };
-        reader.readAsDataURL(file);
-    });
 
 
 
     // BUTTON
     const submitBtn = document.createElement("button");
     submitBtn.textContent = "Opret Warehouse";
-    submitBtn.classList.add("wm-submit");
+    submitBtn.classList.add("m-submit");
     wrapper.appendChild(submitBtn);
 
     // MESSAGE
     const msg = document.createElement("div");
-    msg.classList.add("pm-message");
+    msg.classList.add("m-message");
     wrapper.appendChild(msg);
 
     // SUBMIT LOGIC (unchanged)
@@ -108,7 +73,7 @@ export function createWarehouseModule() {
 
         if (!warehouse.name || !warehouse.description || !warehouse.address) {
             msg.textContent = "Navn, beskrivelse og addresse";
-            msg.className = "wm-message wm-error";
+            msg.className = "m-message m-error";
             return;
         }
 
@@ -123,16 +88,16 @@ export function createWarehouseModule() {
 
             if (!res.ok) {
                 msg.textContent = "Fejl: " + (await res.text());
-                msg.className = "wm-message wm-error";
+                msg.className = "m-message m-error";
                 return;
             }
 
             msg.textContent = "Varehuset blev oprettet!";
-            msg.className = "wm-message wm-success";
+            msg.className = "m-message m-success";
 
         } catch (err) {
             msg.textContent = "Netværksfejl – kunne ikke oprette varehuset.";
-            msg.className = "wm-message wm-error";
+            msg.className = "m-message m-error";
             console.error(err);
         }
     });
