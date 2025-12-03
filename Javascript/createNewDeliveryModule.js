@@ -4,34 +4,34 @@ import { authorizedFetch } from "./ReusableFunctions.js";
 export function createNewDeliveryModule() {
     // MAIN WRAPPER
     const wrapper = document.createElement("div");
-    wrapper.classList.add("dm-form");
+    wrapper.classList.add("pm-form"); // Reuse product module style
 
     // TITLE
     const title = document.createElement("h2");
     title.textContent = "Opret Levering";
-    title.classList.add("dm-title");
+    title.classList.add("pm-title"); // Reuse title style
     wrapper.appendChild(title);
 
     // FLEX ROW
     const contentRow = document.createElement("div");
-    contentRow.classList.add("dm-content-row");
+    contentRow.classList.add("pm-content-row"); // Reuse flex layout
     wrapper.appendChild(contentRow);
 
     // LEFT SIDE (fields)
     const fieldsContainer = document.createElement("div");
-    fieldsContainer.classList.add("dm-fields-container");
+    fieldsContainer.classList.add("pm-fields-container"); // Reuse container style
     contentRow.appendChild(fieldsContainer);
 
     // Helper function for adding fields
     function addField(labelText, el, container = fieldsContainer) {
         const field = document.createElement("div");
-        field.classList.add("dm-field");
+        field.classList.add("pm-field"); // Reuse field style
 
         const label = document.createElement("label");
         label.textContent = labelText;
-        label.classList.add("dm-label");
+        label.classList.add("pm-label"); // Reuse label style
 
-        el.classList.add("dm-input");
+        el.classList.add("pm-input"); // Reuse input style
 
         field.appendChild(label);
         field.appendChild(el);
@@ -40,7 +40,7 @@ export function createNewDeliveryModule() {
 
     // PRODUCT LIST CONTAINER
     const productListContainer = document.createElement("div");
-    productListContainer.classList.add("dm-product-list");
+    productListContainer.classList.add("dm-product-list"); // New class for grouping rows
     fieldsContainer.appendChild(productListContainer);
 
     // Preload products and warehouses
@@ -56,9 +56,7 @@ export function createNewDeliveryModule() {
 
             const warehouseRes = await authorizedFetch("http://localhost:8080/api/warehouses/dto");
             if (warehouseRes.ok) {
-
                 allWarehouses = await warehouseRes.json();
-                console.log(allWarehouses)
             }
         } catch (err) {
             console.error("Fejl ved preload:", err);
@@ -68,7 +66,7 @@ export function createNewDeliveryModule() {
     // Function to create a product row
     function createProductRow() {
         const row = document.createElement("div");
-        row.classList.add("dm-product-row");
+        row.classList.add("dm-product-row"); // New class for row styling
 
         // Product search input
         const productInput = document.createElement("input");
@@ -79,7 +77,7 @@ export function createNewDeliveryModule() {
 
         // Autocomplete dropdown
         const suggestionBox = document.createElement("div");
-        suggestionBox.classList.add("dm-suggestions");
+        suggestionBox.classList.add("dm-suggestions"); // New class for dropdown styling
         row.appendChild(suggestionBox);
 
         // Filter products from preloaded list
@@ -90,14 +88,18 @@ export function createNewDeliveryModule() {
             if (query.length < 1) return;
 
             const matches = allProducts.filter(p => p.name.toLowerCase().includes(query));
+            suggestionBox.style.display = matches.length ? "block" : "none";
             matches.forEach(prod => {
+
                 const item = document.createElement("div");
-                item.classList.add("dm-suggestion-item");
+                item.classList.add("dm-suggestion-item"); // New class for suggestion item
                 item.textContent = prod.name;
                 item.addEventListener("click", () => {
                     productInput.value = prod.name;
                     productInput.dataset.productId = prod.id;
                     suggestionBox.innerHTML = "";
+
+
                 });
                 suggestionBox.appendChild(item);
             });
@@ -133,25 +135,26 @@ export function createNewDeliveryModule() {
     const addProductBtn = document.createElement("button");
     addProductBtn.textContent = "+ Tilføj produkt";
     addProductBtn.type = "button";
-    addProductBtn.classList.add("dm-add-product");
+    addProductBtn.classList.add("pm-submit"); // Reuse button style
+    addProductBtn.style.marginTop = "10px"; // Small tweak
     fieldsContainer.appendChild(addProductBtn);
 
     addProductBtn.addEventListener("click", () => {
         createProductRow();
     });
 
-    // BUTTON
+    // Submit button
     const submitBtn = document.createElement("button");
     submitBtn.textContent = "Opret Levering";
-    submitBtn.classList.add("dm-submit");
+    submitBtn.classList.add("pm-submit"); // Reuse submit button style
     wrapper.appendChild(submitBtn);
 
-    // MESSAGE
+    // Message
     const msg = document.createElement("div");
-    msg.classList.add("dm-message");
+    msg.classList.add("pm-message"); // Reuse message style
     wrapper.appendChild(msg);
 
-    // SUBMIT LOGIC
+    // Submit logic
     submitBtn.addEventListener("click", async () => {
         const products = [];
         const rows = productListContainer.querySelectorAll(".dm-product-row");
@@ -161,37 +164,37 @@ export function createNewDeliveryModule() {
             const warehouse = row.querySelector("select").value;
 
             if (productId && qty > 0 && warehouse) {
-                products.push({ productId, quantity: qty, warehouse });
+                products.push({ warehouseId: warehouse, productId: productId, quantity: qty });
             }
         });
 
         if (products.length === 0) {
             msg.textContent = "Tilføj mindst ét produkt med lager.";
-            msg.className = "dm-message dm-error";
+            msg.className = "pm-message pm-error";
             return;
         }
 
         try {
             const res = await authorizedFetch(
-                "http://localhost:8080/api/deliveries",
+                "http://localhost:8080/api/products/delivery",
                 {
                     method: "POST",
-                    body: JSON.stringify({ products })
+                    body: JSON.stringify(products)
                 }
             );
 
             if (!res.ok) {
                 msg.textContent = "Fejl: " + (await res.text());
-                msg.className = "dm-message dm-error";
+                msg.className = "pm-message pm-error";
                 return;
             }
 
             msg.textContent = "Leveringen blev oprettet!";
-            msg.className = "dm-message dm-success";
+            msg.className = "pm-message pm-success";
 
         } catch (err) {
             msg.textContent = "Netværksfejl – kunne ikke oprette levering.";
-            msg.className = "dm-message dm-error";
+            msg.className = "pm-message pm-error";
             console.error(err);
         }
     });

@@ -4,6 +4,7 @@ body{
 }
 
 /* FULLSCREEN BACKDROP */
+
 .lp-overlay {
     position: fixed;
     top: 0;
@@ -13,15 +14,18 @@ body{
     background: rgba(0,0,0,0.45);
     display: flex;
     justify-content: center;
-    align-items: center;
-    z-index: 999; /* always on top */
+    align-items: flex-start; /* Change from center to flex-start */
+    z-index: 999;
     backdrop-filter: blur(4px);
+    overflow-y: auto; /* Enable vertical scrolling */
+    padding: 40px 0; /* Add padding so content isn't stuck at top */
 }
 
-/* THE LOGIN MODULE INSIDE THE OVERLAY */
 .lp-overlay-box {
     animation: fadeInUp 0.35s ease;
+    margin: auto; /* Keeps it centered horizontally */
 }
+
 
 /* ANIMATION */
 @keyframes fadeInUp {
@@ -40,6 +44,7 @@ body{
 
 /* Modern glass-card layout */
 .pm-form {
+    width: 40vw;
     background: #fff;
     padding: 32px;
     max-width: 760px;
@@ -586,4 +591,44 @@ LOGIN MODULE — MODERN 2025
     padding: 20px 60px;
     font-size: 20px;
     background: var(--elvang-brun);
+}
+
+
+
+
+.dm-suggestions {
+    position: absolute;
+    top: 17.4vh; /* 4px gap below input */
+    width: 90%;
+    max-width: 790px;
+    max-height: 300px;
+    overflow-y: auto;
+
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 0 0 8px 8px;
+
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    z-index: 999;
+    display: none; /* Show only when suggestions exist */
+}
+
+
+
+
+
+.dm-suggestion-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    padding: 10px;
+    cursor: pointer;
+
+    border-bottom: 1px solid #f0f0f0;
+}
+
+
+.dm-suggestion-item:hover {
+    background: #f0f4ff;
 }
