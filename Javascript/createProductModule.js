@@ -3,32 +3,32 @@ import { authorizedFetch } from "./ReusableFunctions.js";
 export function createProductModule() {
 
     const wrapper = document.createElement("div");
-    wrapper.classList.add("pm-form");
+    wrapper.classList.add("m-form");
 
     const title = document.createElement("h2");
     title.textContent = "Opret Produkt";
-    title.classList.add("pm-title");
+    title.classList.add("m-title");
     wrapper.appendChild(title);
 
     // FLEX ROW (fields left, preview right)
     const contentRow = document.createElement("div");
-    contentRow.classList.add("pm-content-row");
+    contentRow.classList.add("m-content-row");
     wrapper.appendChild(contentRow);
 
     // LEFT SIDE (fields)
     const fieldsContainer = document.createElement("div");
-    fieldsContainer.classList.add("pm-fields-container");
+    fieldsContainer.classList.add("m-fields-container");
     contentRow.appendChild(fieldsContainer);
 
     function addField(labelText, el) {
         const field = document.createElement("div");
-        field.classList.add("pm-field");
+        field.classList.add("m-field");
 
         const label = document.createElement("label");
         label.textContent = labelText;
-        label.classList.add("pm-label");
+        label.classList.add("m-label");
 
-        el.classList.add("pm-input");
+        el.classList.add("m-input");
 
         field.appendChild(label);
         field.appendChild(el);
@@ -55,12 +55,12 @@ export function createProductModule() {
 
     // RIGHT SIDE (preview)
     const previewContainer = document.createElement("div");
-    previewContainer.classList.add("pm-preview-container");
+    previewContainer.classList.add("m-preview-container");
     contentRow.appendChild(previewContainer);
 
     const preview = document.createElement("img");
     preview.src = DEFAULT_IMAGE;
-    preview.classList.add("pm-preview");
+    preview.classList.add("m-preview");
     previewContainer.appendChild(preview);
 
     // UPDATE PREVIEW
@@ -91,12 +91,12 @@ export function createProductModule() {
     // BUTTON
     const submitBtn = document.createElement("button");
     submitBtn.textContent = "Opret Produkt";
-    submitBtn.classList.add("pm-submit");
+    submitBtn.classList.add("m-submit");
     wrapper.appendChild(submitBtn);
 
     // MESSAGE
     const msg = document.createElement("div");
-    msg.classList.add("pm-message");
+    msg.classList.add("m-message");
     wrapper.appendChild(msg);
 
     // SUBMIT LOGIC (unchanged)
@@ -111,7 +111,7 @@ export function createProductModule() {
 
         if (!product.name || !product.description || !product.price) {
             msg.textContent = "Navn, beskrivelse og pris skal udfyldes.";
-            msg.className = "pm-message pm-error";
+            msg.className = "m-message m-error";
             return;
         }
 
@@ -126,16 +126,16 @@ export function createProductModule() {
 
             if (!res.ok) {
                 msg.textContent = "Fejl: " + (await res.text());
-                msg.className = "pm-message pm-error";
+                msg.className = "m-message m-error";
                 return;
             }
 
             msg.textContent = "Produktet blev oprettet!";
-            msg.className = "pm-message pm-success";
+            msg.className = "m-message m-success";
 
         } catch (err) {
             msg.textContent = "Netværksfejl – kunne ikke oprette produktet.";
-            msg.className = "pm-message pm-error";
+            msg.className = "m-message m-error";
             console.error(err);
         }
     });

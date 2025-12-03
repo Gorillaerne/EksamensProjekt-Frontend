@@ -3,21 +3,22 @@ import { authorizedFetch } from "./ReusableFunctions.js";
 export function createLowQuantityListModule() {
 
     const wrapper = document.createElement("div");
-    wrapper.classList.add("wq-list");
+    wrapper.classList.add("m-form");
 
     const title = document.createElement("h2");
     title.textContent = "Produkter med lav lagerbeholdning";
-    title.classList.add("wq-title");
+    title.classList.add("m-title");
     wrapper.appendChild(title);
 
     // LIST BOX
     const listBox = document.createElement("div");
-    listBox.classList.add("wq-list-box");
+    listBox.classList.add("m-form");
     wrapper.appendChild(listBox);
+
 
     // MESSAGE BOX (error/success)
     const msg = document.createElement("div");
-    msg.classList.add("wq-message");
+    msg.classList.add("m-message");
     wrapper.appendChild(msg);
 
     async function loadLowQtyProducts() {
@@ -26,7 +27,7 @@ export function createLowQuantityListModule() {
 
             if (!res.ok) {
                 msg.textContent = "Kunne ikke hente produkter.";
-                msg.classList.add("wq-error");
+                msg.classList.add("m-error");
                 return;
             }
 
@@ -42,7 +43,7 @@ export function createLowQuantityListModule() {
 
             data.forEach(wp => {
                 const item = document.createElement("div");
-                item.classList.add("wq-item");
+                item.classList.add("m-item");
 
                 // quantity – product name – warehouse
                 item.textContent = `${wp.quantity} stk · ${wp.product.name} (${wp.warehouse.name})`;
@@ -55,7 +56,7 @@ export function createLowQuantityListModule() {
 
         } catch (e) {
             msg.textContent = "Netværksfejl – kunne ikke hente data.";
-            msg.classList.add("wq-error");
+            msg.classList.add("m-error");
         }
     }
 
