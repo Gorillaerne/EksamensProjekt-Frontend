@@ -4,6 +4,7 @@ body{
 }
 
 /* FULLSCREEN BACKDROP */
+
 .lp-overlay {
     position: fixed;
     top: 0;
@@ -13,15 +14,19 @@ body{
     background: rgba(0,0,0,0.45);
     display: flex;
     justify-content: center;
-    align-items: center;
-    z-index: 999; /* always on top */
+    align-items: flex-start; /* Change from center to flex-start */
+    z-index: 999;
     backdrop-filter: blur(4px);
+    overflow-y: auto; /* Enable vertical scrolling */
+    padding: 40px 0; /* Add padding so content isn't stuck at top */
 }
 
 /* THE LOGIN MODULE INSIDE THE OVERLAY */
 .lp-overlay-box {
     animation: fadeInUp 0.35s ease;
+    margin: auto; /* Keeps it centered horizontally */
 }
+
 
 /* ANIMATION */
 @keyframes fadeInUp {
@@ -39,17 +44,8 @@ body{
 ******************************/
 
 /* Modern glass-card layout */
-.m-form {
-    background: #fff;
-    padding: 32px;
-    max-width: 760px;
-    margin: 40px auto;
-    border-radius: 20px;
-    border: 1px solid #e8e8e8;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.06);
-    font-family: "Inter", system-ui, sans-serif;
-    backdrop-filter: blur(6px);
-}
+
+
 
 /* Title */
 .m-title {
@@ -117,7 +113,7 @@ body{
     border-color: #4b91ff;
     background: #fff;
     outline: none;
-    box-shadow: 0 0 0 3px rgba(75,145,255,0.15);
+    box-shadow: 0 0 0 3px rgba(75, 145, 255, 0.15);
 }
 
 /* Modern image preview */
@@ -127,20 +123,22 @@ body{
     object-fit: cover;
     border-radius: 14px;
     border: 1px solid #e0e0e0;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
     transition: 0.25s transform, 0.25s box-shadow;
 }
 
 /* Hover effect on preview */
 .m-preview:hover {
     transform: scale(1.03);
-    box-shadow: 0 10px 28px rgba(0,0,0,0.12);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.12);
 }
 
 /* Submit button — Modern Primary */
+
 .m-submit {
-    background: linear-gradient(135deg, #4d8cff, #3576ff);
-    color: white;
+
+    background: linear-gradient(135deg, #d8c9b6, var(--elvang-brun)); /* Elvang-inspired tones */
+    color: #333; /* Dark text for contrast */
     border: none;
     padding: 14px;
     width: 100%;
@@ -153,10 +151,12 @@ body{
 }
 
 .m-submit:hover {
-    background: linear-gradient(135deg, #3b6fd1, #1f5cff);
+    background: linear-gradient(135deg, #cbb79e, #a8957a);
     transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(70,120,255,0.35);
+    box-shadow: 0 6px 16px rgba(184, 164, 139, 0.35);
 }
+
+
 
 /* Success/Error Messages */
 .m-message {
@@ -191,23 +191,25 @@ body{
         height: 160px;
     }
 }
+
 /*****************************
 LOGIN MODULE — MODERN 2025
 ******************************/
 
 /* Modern glass-card layout */
 .m-form {
-    width: 40vw;
+   min-width: 30vw;
     background: #fff;
     padding: 32px;
-    max-width: 460px;
+    max-width: 100vw;
     margin: 60px auto;
     border-radius: 20px;
     border: 1px solid #e8e8e8;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.06);
-    font-family: "Inter", system-ui, sans-serif;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
     backdrop-filter: blur(6px);
+    font-family: "Inter", system-ui, sans-serif;
 }
+
 
 /* Title */
 .m-title {
@@ -235,7 +237,7 @@ LOGIN MODULE — MODERN 2025
 /* Labels */
 .m-label {
     font-size: 14px;
-    font-weight: 600;
+    font-weight: 900;
     color: #333;
     margin-bottom: 6px;
 }
@@ -258,29 +260,10 @@ LOGIN MODULE — MODERN 2025
     border-color: #4b91ff;
     background: #fff;
     outline: none;
-    box-shadow: 0 0 0 3px rgba(75,145,255,0.15);
+    box-shadow: 0 0 0 3px rgba(75, 145, 255, 0.15);
 }
 
 /* Submit button — Modern Primary */
-.m-submit {
-    background: linear-gradient(135deg, #4d8cff, #3576ff);
-    color: white;
-    border: none;
-    padding: 14px;
-    width: 100%;
-    margin-top: 10px;
-    border-radius: 12px;
-    font-size: 17px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.25s;
-}
-
-.m-submit:hover {
-    background: linear-gradient(135deg, #3b6fd1, #1f5cff);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(70,120,255,0.35);
-}
 
 /* Success / Error Message */
 .m-message {
@@ -356,6 +339,7 @@ LOGIN MODULE — MODERN 2025
         font-size: 24px;
     }
 }
+
 /***************************
   LANDING PAGE — ELVANG
 ****************************/
@@ -383,8 +367,9 @@ LOGIN MODULE — MODERN 2025
     font-size: 20px;
     background: var(--elvang-brun);
 }
+
 .lp-logo {
-    height:120px;
+    height: 120px;
     width: auto;
     object-fit: cover;
     object-position: center;
@@ -414,7 +399,7 @@ LOGIN MODULE — MODERN 2025
 
 /* Logged-out (Login) button — more visible CTA */
 .lp-login-btn {
-    background: #E0DACF;          /* your brunlige color */
+    background: #E0DACF; /* your brunlige color */
     border: 1px solid #d4cdc2;
     color: #1a1a1a;
 }
@@ -422,7 +407,7 @@ LOGIN MODULE — MODERN 2025
 .lp-login-btn:hover {
     background: #d7d0c4;
     transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
 }
 
 
@@ -525,12 +510,14 @@ LOGIN MODULE — MODERN 2025
         grid-template-columns: 1fr 1fr;
     }
 }
+
 /*search BAR*/
 
-.search-wrapper{
+.search-wrapper {
     margin-left: 45vh;
     position: relative;
 }
+
 .search-bar {
     width: 800px;
     padding: 10px 14px;
@@ -551,23 +538,24 @@ LOGIN MODULE — MODERN 2025
 
 .search-results {
 
-    position: absolute;   /* <--- THIS MAKES IT FLOAT */
-    top: 100%;            /* below the input */
+    position: absolute; /* <--- THIS MAKES IT FLOAT */
+    top: 100%; /* below the input */
     left: 0;
     width: 100%;
     max-width: 790px;
     max-height: 300px; /* enough for ~5 items */
-    overflow-y: auto;  /* enable scroll */
+    overflow-y: auto; /* enable scroll */
 
     background: white;
     border: 1px solid #ccc;
     border-top: none;
     border-radius: 0 0 8px 8px;
 
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     z-index: 999;
     display: none;
 }
+
 .search-result-item {
     display: flex;
     align-items: center;
@@ -617,6 +605,7 @@ LOGIN MODULE — MODERN 2025
     font-size: 12px;
     color: #666;
 }
+
 /* HEADER */
 .db-wrapper {
     font-family: "Inter", sans-serif;
@@ -633,4 +622,51 @@ LOGIN MODULE — MODERN 2025
     padding: 20px 60px;
     font-size: 20px;
     background: var(--elvang-brun);
+}
+
+
+.dm-suggestions {
+    position: absolute;
+    top: 100%; /* directly below the input */
+    left: 0;
+    width: 100%;
+    max-height: 300px;
+    overflow-y: auto;
+
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 0 0 8px 8px;
+
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 999;
+    display: none;
+}
+
+
+.dm-suggestion-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    padding: 10px;
+    cursor: pointer;
+
+    border-bottom: 1px solid #f0f0f0;
+}
+
+
+.dm-suggestion-item:hover {
+    background: #f0f4ff;
+}
+
+.dm-fields-container {
+    flex: 1;
+
+}
+
+.dm-product-row {
+    border-radius: 2px;
+    border-bottom: 1px solid #b8b8b8;
+    margin-bottom: 15px;
+
 }

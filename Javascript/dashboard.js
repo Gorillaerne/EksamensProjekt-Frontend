@@ -41,7 +41,7 @@ export function renderDashboard() {
         return createLandingPage()
     }));
 
-    grid.appendChild(createDashboardCard("Register new delivery", function(){
+    grid.appendChild(createDashboardCard("Registrer ny leverance", function(){
         return createNewDeliveryModule()
     }));
 
