@@ -1,10 +1,5 @@
 
-
-
-
-
-
-
+import { authorizedFetch } from "./ReusableFunctions.js";
 
 export function createNewDeliveryModule() {
     // MAIN WRAPPER
@@ -17,7 +12,7 @@ export function createNewDeliveryModule() {
     title.classList.add("dm-title");
     wrapper.appendChild(title);
 
-    // FLEX ROW (fields left, preview or extra info right)
+    // FLEX ROW
     const contentRow = document.createElement("div");
     contentRow.classList.add("dm-content-row");
     wrapper.appendChild(contentRow);
@@ -28,7 +23,7 @@ export function createNewDeliveryModule() {
     contentRow.appendChild(fieldsContainer);
 
     // Helper function for adding fields
-    function addField(labelText, el) {
+    function addField(labelText, el, container = fieldsContainer) {
         const field = document.createElement("div");
         field.classList.add("dm-field");
 
@@ -40,34 +35,110 @@ export function createNewDeliveryModule() {
 
         field.appendChild(label);
         field.appendChild(el);
-        fieldsContainer.appendChild(field);
+        container.appendChild(field);
     }
 
-    // INPUTS (example fields for delivery)
-    const deliveryDateInput = document.createElement("input");
-    deliveryDateInput.type = "date";
-    deliveryDateInput.required = true;
-    addField("Leveringsdato", deliveryDateInput);
+    // PRODUCT LIST CONTAINER
+    const productListContainer = document.createElement("div");
+    productListContainer.classList.add("dm-product-list");
+    fieldsContainer.appendChild(productListContainer);
 
-    const addressInput = document.createElement("textarea");
-    addressInput.required = true;
-    addField("Adresse", addressInput);
+    // Preload products and warehouses
+    let allProducts = [];
+    let allWarehouses = [];
 
-    const carrierInput = document.createElement("input");
-    addField("Transportør", carrierInput);
+    async function preloadData() {
+        try {
+            const productRes = await authorizedFetch("http://localhost:8080/api/products/searchBar");
+            if (productRes.ok) {
+                allProducts = await productRes.json();
+            }
 
-    const trackingInput = document.createElement("input");
-    addField("Trackingnummer", trackingInput);
+            const warehouseRes = await authorizedFetch("http://localhost:8080/api/warehouses/dto");
+            if (warehouseRes.ok) {
 
-    // RIGHT SIDE (optional preview or summary)
-    const previewContainer = document.createElement("div");
-    previewContainer.classList.add("dm-preview-container");
-    contentRow.appendChild(previewContainer);
+                allWarehouses = await warehouseRes.json();
+                console.log(allWarehouses)
+            }
+        } catch (err) {
+            console.error("Fejl ved preload:", err);
+        }
+    }
 
-    const preview = document.createElement("div");
-    preview.textContent = "Leveringsoversigt vises her...";
-    preview.classList.add("dm-preview");
-    previewContainer.appendChild(preview);
+    // Function to create a product row
+    function createProductRow() {
+        const row = document.createElement("div");
+        row.classList.add("dm-product-row");
+
+        // Product search input
+        const productInput = document.createElement("input");
+        productInput.type = "text";
+        productInput.placeholder = "Søg produkt...";
+        productInput.required = true;
+        addField("Produkt", productInput, row);
+
+        // Autocomplete dropdown
+        const suggestionBox = document.createElement("div");
+        suggestionBox.classList.add("dm-suggestions");
+        row.appendChild(suggestionBox);
+
+        // Filter products from preloaded list
+        productInput.addEventListener("input", () => {
+            const query = productInput.value.trim().toLowerCase();
+            suggestionBox.innerHTML = "";
+
+            if (query.length < 1) return;
+
+            const matches = allProducts.filter(p => p.name.toLowerCase().includes(query));
+            matches.forEach(prod => {
+                const item = document.createElement("div");
+                item.classList.add("dm-suggestion-item");
+                item.textContent = prod.name;
+                item.addEventListener("click", () => {
+                    productInput.value = prod.name;
+                    productInput.dataset.productId = prod.id;
+                    suggestionBox.innerHTML = "";
+                });
+                suggestionBox.appendChild(item);
+            });
+        });
+
+        // Quantity input
+        const qtyInput = document.createElement("input");
+        qtyInput.type = "number";
+        qtyInput.min = "1";
+        qtyInput.required = true;
+        addField("Antal", qtyInput, row);
+
+        // Warehouse select for this product
+        const warehouseSelect = document.createElement("select");
+        warehouseSelect.required = true;
+        allWarehouses.forEach(w => {
+            const option = document.createElement("option");
+            option.value = w.id;
+            option.textContent = w.name;
+            warehouseSelect.appendChild(option);
+        });
+        addField("Lager", warehouseSelect, row);
+
+        productListContainer.appendChild(row);
+    }
+
+    // Add first product row
+    preloadData().then(() => {
+        createProductRow();
+    });
+
+    // Add more products button
+    const addProductBtn = document.createElement("button");
+    addProductBtn.textContent = "+ Tilføj produkt";
+    addProductBtn.type = "button";
+    addProductBtn.classList.add("dm-add-product");
+    fieldsContainer.appendChild(addProductBtn);
+
+    addProductBtn.addEventListener("click", () => {
+        createProductRow();
+    });
 
     // BUTTON
     const submitBtn = document.createElement("button");
@@ -80,29 +151,32 @@ export function createNewDeliveryModule() {
     msg.classList.add("dm-message");
     wrapper.appendChild(msg);
 
-    // SUBMIT LOGIC (to be implemented)
+    // SUBMIT LOGIC
     submitBtn.addEventListener("click", async () => {
-        const delivery = {
-            date: deliveryDateInput.value,
-            address: addressInput.value.trim(),
-            carrier: carrierInput.value.trim(),
-            trackingNumber: trackingInput.value.trim()
-        };
+        const products = [];
+        const rows = productListContainer.querySelectorAll(".dm-product-row");
+        rows.forEach(row => {
+            const productId = row.querySelector("input[type='text']").dataset.productId;
+            const qty = parseInt(row.querySelector("input[type='number']").value);
+            const warehouse = row.querySelector("select").value;
 
-        // Basic validation
-        if (!delivery.date || !delivery.address) {
-            msg.textContent = "Leveringsdato og adresse skal udfyldes.";
+            if (productId && qty > 0 && warehouse) {
+                products.push({ productId, quantity: qty, warehouse });
+            }
+        });
+
+        if (products.length === 0) {
+            msg.textContent = "Tilføj mindst ét produkt med lager.";
             msg.className = "dm-message dm-error";
             return;
         }
 
         try {
-            // Replace with your API call
             const res = await authorizedFetch(
                 "http://localhost:8080/api/deliveries",
                 {
                     method: "POST",
-                    body: JSON.stringify(delivery)
+                    body: JSON.stringify({ products })
                 }
             );
 
