@@ -39,7 +39,7 @@ body{
 ******************************/
 
 /* Modern glass-card layout */
-.pm-form {
+.m-form {
     background: #fff;
     padding: 32px;
     max-width: 760px;
@@ -52,7 +52,7 @@ body{
 }
 
 /* Title */
-.pm-title {
+.m-title {
     margin-bottom: 30px;
     text-align: center;
     font-size: 28px;
@@ -62,18 +62,18 @@ body{
 }
 
 /* FLEX LAYOUT */
-.pm-content-row {
+.m-content-row {
     display: flex;
     gap: 36px;
 }
 
 /* LEFT SIDE */
-.pm-fields-container {
+.m-fields-container {
     flex: 1;
 }
 
 /* RIGHT SIDE */
-.pm-preview-container {
+.m-preview-container {
     width: 220px;
     display: flex;
     justify-content: center;
@@ -81,14 +81,14 @@ body{
 }
 
 /* Field wrapper */
-.pm-field {
+.m-field {
     display: flex;
     flex-direction: column;
     margin-bottom: 20px;
 }
 
 /* Labels */
-.pm-label {
+.m-label {
     font-size: 14px;
     font-weight: 600;
     color: #333;
@@ -96,9 +96,9 @@ body{
 }
 
 /* Modern input fields */
-.pm-input,
-.pm-file-input,
-.pm-field textarea {
+.m-input,
+.m-file-input,
+.m-field textarea {
     padding: 12px;
     font-size: 15px;
     border: 1px solid #dcdcdc;
@@ -107,13 +107,13 @@ body{
     transition: 0.25s border, 0.25s background;
 }
 
-.pm-input:hover,
-.pm-field textarea:hover {
+.m-input:hover,
+.m-field textarea:hover {
     background: #fff;
 }
 
-.pm-input:focus,
-.pm-field textarea:focus {
+.m-input:focus,
+.m-field textarea:focus {
     border-color: #4b91ff;
     background: #fff;
     outline: none;
@@ -121,7 +121,7 @@ body{
 }
 
 /* Modern image preview */
-.pm-preview {
+.m-preview {
     width: 200px;
     height: 200px;
     object-fit: cover;
@@ -132,13 +132,13 @@ body{
 }
 
 /* Hover effect on preview */
-.pm-preview:hover {
+.m-preview:hover {
     transform: scale(1.03);
     box-shadow: 0 10px 28px rgba(0,0,0,0.12);
 }
 
 /* Submit button — Modern Primary */
-.pm-submit {
+.m-submit {
     background: linear-gradient(135deg, #4d8cff, #3576ff);
     color: white;
     border: none;
@@ -152,41 +152,41 @@ body{
     transition: 0.25s;
 }
 
-.pm-submit:hover {
+.m-submit:hover {
     background: linear-gradient(135deg, #3b6fd1, #1f5cff);
     transform: translateY(-2px);
     box-shadow: 0 6px 16px rgba(70,120,255,0.35);
 }
 
 /* Success/Error Messages */
-.pm-message {
+.m-message {
     margin-top: 18px;
     text-align: center;
     font-weight: 600;
     font-size: 15px;
 }
 
-.pm-error {
+.m-error {
     color: #d9534f;
 }
 
-.pm-success {
+.m-success {
     color: #28a745;
 }
 
 /* RESPONSIVE */
 @media (max-width: 700px) {
-    .pm-content-row {
+    .m-content-row {
         flex-direction: column;
         align-items: center;
     }
 
-    .pm-preview-container {
+    .m-preview-container {
         width: 100%;
         justify-content: center;
     }
 
-    .pm-preview {
+    .m-preview {
         width: 160px;
         height: 160px;
     }
@@ -196,7 +196,7 @@ LOGIN MODULE — MODERN 2025
 ******************************/
 
 /* Modern glass-card layout */
-.lm-form {
+.m-form {
     width: 40vw;
     background: #fff;
     padding: 32px;
@@ -210,7 +210,7 @@ LOGIN MODULE — MODERN 2025
 }
 
 /* Title */
-.lm-title {
+.m-title {
     margin-bottom: 26px;
     text-align: center;
     font-size: 26px;
@@ -220,20 +220,20 @@ LOGIN MODULE — MODERN 2025
 }
 
 /* Fields container */
-.lm-fields-container {
+.m-fields-container {
     display: flex;
     flex-direction: column;
 }
 
 /* Field wrapper */
-.lm-field {
+.m-field {
     display: flex;
     flex-direction: column;
     margin-bottom: 20px;
 }
 
 /* Labels */
-.lm-label {
+.m-label {
     font-size: 14px;
     font-weight: 600;
     color: #333;
@@ -241,7 +241,7 @@ LOGIN MODULE — MODERN 2025
 }
 
 /* Modern inputs */
-.lm-input {
+.m-input {
     padding: 12px;
     font-size: 15px;
     border: 1px solid #dcdcdc;
@@ -250,11 +250,11 @@ LOGIN MODULE — MODERN 2025
     transition: 0.25s border, 0.25s background, 0.25s box-shadow;
 }
 
-.lm-input:hover {
+.m-input:hover {
     background: #fff;
 }
 
-.lm-input:focus {
+.m-input:focus {
     border-color: #4b91ff;
     background: #fff;
     outline: none;
@@ -262,7 +262,7 @@ LOGIN MODULE — MODERN 2025
 }
 
 /* Submit button — Modern Primary */
-.lm-submit {
+.m-submit {
     background: linear-gradient(135deg, #4d8cff, #3576ff);
     color: white;
     border: none;
@@ -276,36 +276,83 @@ LOGIN MODULE — MODERN 2025
     transition: 0.25s;
 }
 
-.lm-submit:hover {
+.m-submit:hover {
     background: linear-gradient(135deg, #3b6fd1, #1f5cff);
     transform: translateY(-2px);
     box-shadow: 0 6px 16px rgba(70,120,255,0.35);
 }
 
 /* Success / Error Message */
-.lm-message {
+.m-message {
     margin-top: 18px;
     text-align: center;
     font-weight: 600;
     font-size: 15px;
 }
 
-.lm-error {
+.m-error {
     color: #d9534f;
 }
 
-.lm-success {
+.m-success {
     color: #28a745;
 }
 
+/* Wrapper der centrerer alt midt på siden */
+#dashboard-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 40vh;
+    padding: 40px;
+    background: #f5f6fa;
+}
+
+/* Grid layout til knapper */
+#dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    max-width: 900px;
+    width: 100%;
+}
+
+/* Store knapper (cards) */
+.dashboard-card {
+    background: white;
+    padding: 40px 20px;
+    border-radius: 16px;
+    text-align: center;
+    font-size: 1.4rem;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform .15s ease, box-shadow .15s ease;
+}
+
+/* Hover effekt */
+.dashboard-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.15);
+    background: #eef3ff;
+}
+
+/* Tekst styling */
+.dashboard-card h3 {
+    margin: 0;
+    color: #2c3e50;
+    user-select: none;
+}
+
+
 /* Responsive for mobile */
 @media (max-width: 480px) {
-    .lm-form {
+    .m-form {
         margin: 30px 16px;
         padding: 26px;
     }
 
-    .lm-title {
+    .m-title {
         font-size: 24px;
     }
 }

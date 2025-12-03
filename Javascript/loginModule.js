@@ -3,28 +3,28 @@ import { authorizedFetch } from "./ReusableFunctions.js";
 export function createLoginModule() {
 
     const wrapper = document.createElement("div");
-    wrapper.classList.add("lm-form");
+    wrapper.classList.add("m-form");
 
     // TITLE
     const title = document.createElement("h2");
     title.textContent = "Login";
-    title.classList.add("lm-title");
+    title.classList.add("m-title");
     wrapper.appendChild(title);
 
     // FIELDS CONTAINER
     const fieldsContainer = document.createElement("div");
-    fieldsContainer.classList.add("lm-fields-container");
+    fieldsContainer.classList.add("m-fields-container");
     wrapper.appendChild(fieldsContainer);
 
     function addField(labelText, el) {
         const field = document.createElement("div");
-        field.classList.add("lm-field");
+        field.classList.add("m-field");
 
         const label = document.createElement("label");
         label.textContent = labelText;
-        label.classList.add("lm-label");
+        label.classList.add("m-label");
 
-        el.classList.add("lm-input");
+        el.classList.add("m-input");
 
         field.appendChild(label);
         field.appendChild(el);
@@ -44,12 +44,12 @@ export function createLoginModule() {
     // BUTTON
     const loginBtn = document.createElement("button");
     loginBtn.textContent = "Login";
-    loginBtn.classList.add("lm-submit");
+    loginBtn.classList.add("m-submit");
     wrapper.appendChild(loginBtn);
 
     // MESSAGE
     const msg = document.createElement("div");
-    msg.classList.add("lm-message");
+    msg.classList.add("m-message");
     wrapper.appendChild(msg);
 
     // SUBMIT LOGIC
@@ -60,7 +60,7 @@ export function createLoginModule() {
 
         if (!username || !password) {
             msg.textContent = "Udfyld brugernavn og kodeord.";
-            msg.className = "lm-message lm-error";
+            msg.className = "m-message m-error";
             return;
         }
 
@@ -77,7 +77,7 @@ export function createLoginModule() {
 
             if (!res.ok) {
                 msg.textContent = "Login fejlede: " + (await res.text());
-                msg.className = "lm-message lm-error";
+                msg.className = "m-message m-error";
                 return;
             }
 
@@ -89,7 +89,7 @@ export function createLoginModule() {
             }
 
             msg.textContent = "Login succes!";
-            msg.className = "lm-message lm-success";
+            msg.className = "m-message m-success";
 
             setTimeout(() => {
                 location.reload();
@@ -97,7 +97,7 @@ export function createLoginModule() {
 
         } catch (err) {
             msg.textContent = "Netværksfejl – kunne ikke logge ind.";
-            msg.className = "lm-message lm-error";
+            msg.className = "m-message m-error";
             console.error(err);
         }
     });
