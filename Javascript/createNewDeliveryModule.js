@@ -19,7 +19,7 @@ export function createNewDeliveryModule() {
 
     // LEFT SIDE (fields)
     const fieldsContainer = document.createElement("div");
-    fieldsContainer.classList.add("pm-fields-container"); // Reuse container style
+    fieldsContainer.classList.add("dm-fields-container"); // Reuse container style
     contentRow.appendChild(fieldsContainer);
 
     // Helper function for adding fields
@@ -64,42 +64,50 @@ export function createNewDeliveryModule() {
     }
 
     // Function to create a product row
+
     function createProductRow() {
         const row = document.createElement("div");
-        row.classList.add("dm-product-row"); // New class for row styling
+        row.classList.add("dm-product-row");
+
+        // Create wrapper for input + suggestions
+        const inputWrapper = document.createElement("div");
+        inputWrapper.style.position = "relative"; // Important!
+        row.appendChild(inputWrapper);
 
         // Product search input
         const productInput = document.createElement("input");
         productInput.type = "text";
         productInput.placeholder = "Søg produkt...";
         productInput.required = true;
-        addField("Produkt", productInput, row);
+        addField("Produkt", productInput, inputWrapper);
 
         // Autocomplete dropdown
         const suggestionBox = document.createElement("div");
-        suggestionBox.classList.add("dm-suggestions"); // New class for dropdown styling
-        row.appendChild(suggestionBox);
+        suggestionBox.classList.add("dm-suggestions");
+        inputWrapper.appendChild(suggestionBox);
 
-        // Filter products from preloaded list
+        // Filter products
         productInput.addEventListener("input", () => {
             const query = productInput.value.trim().toLowerCase();
             suggestionBox.innerHTML = "";
 
-            if (query.length < 1) return;
+            if (query.length < 1) {
+                suggestionBox.style.display = "none";
+                return;
+            }
 
             const matches = allProducts.filter(p => p.name.toLowerCase().includes(query));
             suggestionBox.style.display = matches.length ? "block" : "none";
-            matches.forEach(prod => {
 
+            matches.forEach(prod => {
                 const item = document.createElement("div");
-                item.classList.add("dm-suggestion-item"); // New class for suggestion item
+                item.classList.add("dm-suggestion-item");
                 item.textContent = prod.name;
                 item.addEventListener("click", () => {
                     productInput.value = prod.name;
                     productInput.dataset.productId = prod.id;
                     suggestionBox.innerHTML = "";
-
-
+                    suggestionBox.style.display = "none";
                 });
                 suggestionBox.appendChild(item);
             });
@@ -112,7 +120,7 @@ export function createNewDeliveryModule() {
         qtyInput.required = true;
         addField("Antal", qtyInput, row);
 
-        // Warehouse select for this product
+        // Warehouse select
         const warehouseSelect = document.createElement("select");
         warehouseSelect.required = true;
         allWarehouses.forEach(w => {
@@ -125,6 +133,7 @@ export function createNewDeliveryModule() {
 
         productListContainer.appendChild(row);
     }
+
 
     // Add first product row
     preloadData().then(() => {
