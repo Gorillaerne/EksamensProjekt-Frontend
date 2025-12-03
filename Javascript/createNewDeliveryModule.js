@@ -4,17 +4,17 @@ import { authorizedFetch } from "./ReusableFunctions.js";
 export function createNewDeliveryModule() {
     // MAIN WRAPPER
     const wrapper = document.createElement("div");
-    wrapper.classList.add("pm-form"); // Reuse product module style
+    wrapper.classList.add("m-form"); // Reuse product module style
 
     // TITLE
     const title = document.createElement("h2");
     title.textContent = "Opret Levering";
-    title.classList.add("pm-title"); // Reuse title style
+    title.classList.add("m-title"); // Reuse title style
     wrapper.appendChild(title);
 
     // FLEX ROW
     const contentRow = document.createElement("div");
-    contentRow.classList.add("pm-content-row"); // Reuse flex layout
+    contentRow.classList.add("m-content-row"); // Reuse flex layout
     wrapper.appendChild(contentRow);
 
     // LEFT SIDE (fields)
@@ -25,13 +25,13 @@ export function createNewDeliveryModule() {
     // Helper function for adding fields
     function addField(labelText, el, container = fieldsContainer) {
         const field = document.createElement("div");
-        field.classList.add("pm-field"); // Reuse field style
+        field.classList.add("m-field"); // Reuse field style
 
         const label = document.createElement("label");
         label.textContent = labelText;
-        label.classList.add("pm-label"); // Reuse label style
+        label.classList.add("m-label"); // Reuse label style
 
-        el.classList.add("pm-input"); // Reuse input style
+        el.classList.add("m-input"); // Reuse input style
 
         field.appendChild(label);
         field.appendChild(el);
@@ -144,7 +144,7 @@ export function createNewDeliveryModule() {
     const addProductBtn = document.createElement("button");
     addProductBtn.textContent = "+ Tilføj produkt";
     addProductBtn.type = "button";
-    addProductBtn.classList.add("pm-submit"); // Reuse button style
+    addProductBtn.classList.add("m-submit"); // Reuse button style
     addProductBtn.style.marginTop = "10px"; // Small tweak
     fieldsContainer.appendChild(addProductBtn);
 
@@ -155,12 +155,12 @@ export function createNewDeliveryModule() {
     // Submit button
     const submitBtn = document.createElement("button");
     submitBtn.textContent = "Opret Levering";
-    submitBtn.classList.add("pm-submit"); // Reuse submit button style
+    submitBtn.classList.add("m-submit"); // Reuse submit button style
     wrapper.appendChild(submitBtn);
 
     // Message
     const msg = document.createElement("div");
-    msg.classList.add("pm-message"); // Reuse message style
+    msg.classList.add("m-message"); // Reuse message style
     wrapper.appendChild(msg);
 
     // Submit logic
@@ -179,7 +179,7 @@ export function createNewDeliveryModule() {
 
         if (products.length === 0) {
             msg.textContent = "Tilføj mindst ét produkt med lager.";
-            msg.className = "pm-message pm-error";
+            msg.className = "m-message m-error";
             return;
         }
 
@@ -194,16 +194,16 @@ export function createNewDeliveryModule() {
 
             if (!res.ok) {
                 msg.textContent = "Fejl: " + (await res.text());
-                msg.className = "pm-message pm-error";
+                msg.className = "m-message m-error";
                 return;
             }
 
             msg.textContent = "Leveringen blev oprettet!";
-            msg.className = "pm-message pm-success";
+            msg.className = "m-message m-success";
 
         } catch (err) {
             msg.textContent = "Netværksfejl – kunne ikke oprette levering.";
-            msg.className = "pm-message pm-error";
+            msg.className = "m-message m-error";
             console.error(err);
         }
     });
