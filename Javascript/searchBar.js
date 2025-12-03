@@ -1,4 +1,5 @@
-import { authorizedFetch } from "./ReusableFunctions.js";
+import {authorizedFetch, showOverlay} from "./ReusableFunctions.js";
+import {createProductPageModule} from "./productPageModule.js";
 
 export async function createSearchBar() {
 
@@ -95,6 +96,7 @@ export async function createSearchBar() {
                 searchBar.value = product.name;
                 resultBox.innerHTML = "";
                 resultBox.style.display = "none";
+                showOverlay(createProductPageModule(product.id))
             });
 
             resultBox.appendChild(item);
