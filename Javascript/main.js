@@ -1,10 +1,19 @@
 
-import {createHeader} from "./header.js";
-import {createLoginModule} from "./loginModule.js";
+
 import {renderDashboard} from "./dashboard.js";
+import {createHeader} from "./header.js";
+import {isTokenExpired} from "./ReusableFunctions.js";
+import {createLandingPage} from "./landingPageModule.js";
 
 const app = document.getElementById("app")
 
 
-app.appendChild(await createHeader())
-app.appendChild(renderDashboard())
+
+if (isTokenExpired()){
+
+    app.appendChild(createLandingPage())
+}else {
+    app.appendChild(await createHeader())
+    app.appendChild(renderDashboard())
+}
+

@@ -4,12 +4,18 @@ import { createProductTransferModule } from "./moveProductToWarehouseModule.js";
 import { createLowQuantityListModule } from "./lowProductAlertModule.js";
 import { createLandingPage } from "./landingPageModule.js";
 import { createLoginModule } from "./loginModule.js";
-import {showOverlay} from "./ReusableFunctions.js";
+import {isTokenExpired, showOverlay} from "./ReusableFunctions.js";
 
 const app = document.getElementById("app");
 
 // ---------- render dashboard ----------
 export function renderDashboard() {
+
+    if (isTokenExpired()){
+        app.innerHTML="";
+        app.appendChild(createLandingPage())
+        return
+    }
 
 
     const wrapper = document.createElement("div");

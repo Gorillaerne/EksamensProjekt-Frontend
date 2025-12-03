@@ -20,13 +20,7 @@ body{
 
 /* THE LOGIN MODULE INSIDE THE OVERLAY */
 .lp-overlay-box {
-    background: #ffffff;
-    padding: 5vh;
-    border-radius: 14px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    max-width: 90%;
     animation: fadeInUp 0.35s ease;
-
 }
 
 /* ANIMATION */
@@ -203,6 +197,7 @@ LOGIN MODULE — MODERN 2025
 
 /* Modern glass-card layout */
 .lm-form {
+    width: 40vw;
     background: #fff;
     padding: 32px;
     max-width: 460px;
