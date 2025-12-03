@@ -5,6 +5,7 @@ import { createLowQuantityListModule } from "./lowProductAlertModule.js";
 import { createLandingPage } from "./landingPageModule.js";
 import { createLoginModule } from "./loginModule.js";
 import {isTokenExpired, showOverlay} from "./ReusableFunctions.js";
+import {createNewDeliveryModule} from "./createNewDeliveryModule.js";
 
 const app = document.getElementById("app");
 
@@ -40,8 +41,8 @@ export function renderDashboard() {
         return createLandingPage()
     }));
 
-    grid.appendChild(createDashboardCard("Log ind", function(){
-        return createLoginModule()
+    grid.appendChild(createDashboardCard("Register new delivery", function(){
+        return createNewDeliveryModule()
     }));
 
     wrapper.appendChild(grid);
