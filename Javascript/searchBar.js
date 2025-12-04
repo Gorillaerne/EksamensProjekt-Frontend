@@ -92,11 +92,11 @@ export async function createSearchBar() {
             item.appendChild(info);
 
             // click → fill input & close dropdown
-            item.addEventListener("click", () => {
+            item.addEventListener("click", async () => {
                 searchBar.value = product.name;
                 resultBox.innerHTML = "";
                 resultBox.style.display = "none";
-                showOverlay(createProductPageModule(product.id))
+                showOverlay(await createProductPageModule(product.id))
             });
 
             resultBox.appendChild(item);

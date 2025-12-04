@@ -132,6 +132,10 @@ export function createProductModule() {
 
             msg.textContent = "Produktet blev oprettet!";
             msg.className = "m-message m-success";
+            window.setTimeout(()=>{
+                console.log("Delayer lige et sekund")
+                location.reload();
+                },800);
 
         } catch (err) {
             msg.textContent = "Netværksfejl – kunne ikke oprette produktet.";
