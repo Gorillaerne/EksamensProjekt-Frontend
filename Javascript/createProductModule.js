@@ -105,7 +105,7 @@ export function createProductModule() {
             name: nameInput.value.trim(),
             description: descInput.value.trim(),
             picture: encodedPicture || DEFAULT_IMAGE,
-            sku: skuInput.value.trim(),
+            SKU: skuInput.value.trim(),
             price: priceInput.value ? parseFloat(priceInput.value) : null
         };
 

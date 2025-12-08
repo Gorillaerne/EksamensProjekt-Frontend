@@ -20,7 +20,6 @@ export async function createProductPageModule(productId){
     title.classList.add("m-title");
     wrapper.appendChild(title);
 
-
     const name = document.createElement("input");
     name.value = product.name;
     name.classList.add("pm-name");
@@ -40,6 +39,59 @@ export async function createProductPageModule(productId){
     description.value = product.description;
     description.classList.add("pm-description");
     wrapper.appendChild(description);
+
+    const warehouseQuantityWrapper = document.createElement("div");
+    product.warehouseList.forEach(wh => {
+        const warehouseItem = document.createElement("div");
+
+        const warehouseitemName = document.createElement("div");
+        warehouseitemName.textContent = wh.name;
+        warehouseItem.appendChild(warehouseitemName);
+
+
+
+        const warehouseitemQuantity = document.createElement("input");
+        warehouseitemQuantity.type = "number";
+        warehouseitemQuantity.step = "1";
+        warehouseitemQuantity.min = "0";
+        warehouseitemQuantity.value = wh.quantity;
+
+        warehouseitemQuantity.addEventListener("blur", async function () {
+            const patchWarehouseProduct = {
+                id:wh.id,
+                quantity: warehouseitemQuantity.value
+            }
+
+            try{
+            const warehouseProductResponse = await authorizedFetch("http://localhost:8080/api/warehouseproducts", {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(patchWarehouseProduct)
+            });
+
+            if(!warehouseProductResponse.ok){
+                throw new Error(await warehouseProductResponse.text());
+            }
+
+            } catch (e){
+                console.log(e);
+            }
+
+            }
+
+        )
+        warehouseItem.appendChild(warehouseitemQuantity);
+
+
+
+        warehouseQuantityWrapper.appendChild(warehouseItem);
+        }
+    )
+    wrapper.appendChild(warehouseQuantityWrapper);
+
+
 
     return wrapper;
 }
