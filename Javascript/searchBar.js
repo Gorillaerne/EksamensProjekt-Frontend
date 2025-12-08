@@ -1,4 +1,5 @@
-import { authorizedFetch } from "./ReusableFunctions.js";
+import {authorizedFetch, showOverlay} from "./ReusableFunctions.js";
+import {createProductPageModule} from "./productPageModule.js";
 
 export async function createSearchBar() {
 
@@ -91,10 +92,11 @@ export async function createSearchBar() {
             item.appendChild(info);
 
             // click → fill input & close dropdown
-            item.addEventListener("click", () => {
+            item.addEventListener("click", async () => {
                 searchBar.value = product.name;
                 resultBox.innerHTML = "";
                 resultBox.style.display = "none";
+                showOverlay(await createProductPageModule(product.id))
             });
 
             resultBox.appendChild(item);
