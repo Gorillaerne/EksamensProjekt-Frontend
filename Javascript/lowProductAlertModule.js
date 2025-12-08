@@ -1,6 +1,6 @@
 import { authorizedFetch } from "./ReusableFunctions.js";
 
-export function createLowQuantityListModule() {
+export async function createLowQuantityListModule() {
 
     const wrapper = document.createElement("div");
     wrapper.classList.add("m-form");
@@ -44,9 +44,10 @@ export function createLowQuantityListModule() {
             data.forEach(wp => {
                 const item = document.createElement("div");
                 item.classList.add("m-item");
+                console.log(wp)
 
                 // quantity – product name – warehouse
-                item.textContent = `${wp.quantity} stk · ${wp.product.name} (${wp.warehouse.name})`;
+                item.textContent = `${wp.quantity} stk · ${wp.productName} (${wp.warehouseName})`;
 
                 // Rød farve hvis ekstremt lavt (fx < 3)
                 if (wp.quantity < 3) item.classList.add("critical");
@@ -54,14 +55,16 @@ export function createLowQuantityListModule() {
                 listBox.appendChild(item);
             });
 
-        } catch (e) {
+        } catch
+            (e) {
+            console.log(e)
             msg.textContent = "Netværksfejl – kunne ikke hente data.";
             msg.classList.add("m-error");
         }
     }
 
     // Hent ved første load
-    loadLowQtyProducts();
+   await loadLowQtyProducts()
 
     return wrapper;
 }
