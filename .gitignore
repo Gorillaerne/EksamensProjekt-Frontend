@@ -1,0 +1,18 @@
+
+# Test coverage
+coverage/
+.nyc_output/
+
+# Dependencies
+node_modules/
+
+# Test results
+*.log
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
