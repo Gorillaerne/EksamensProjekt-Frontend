@@ -17,6 +17,16 @@ export async function createHeader(){
     header.appendChild(logo);
    header.appendChild(await createSearchBar())
 
+    const logoutButton = document.createElement("button")
+    logoutButton.textContent = "Log ud"
+    logoutButton.classList.add("logout-btn")
+    logoutButton.addEventListener("click", function (){
+        localStorage.removeItem("token")
+        location.reload();
+    })
+    header.appendChild(logoutButton)
+
+
     wrapper.appendChild(header);
 
     return wrapper
