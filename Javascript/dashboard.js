@@ -3,21 +3,26 @@ import { createWarehouseModule } from "./createWarehouseModule.js";
 import { createProductTransferModule } from "./moveProductToWarehouseModule.js";
 import { createLowQuantityListModule } from "./lowProductAlertModule.js";
 import { createLandingPage } from "./landingPageModule.js";
-import { createLoginModule } from "./loginModule.js";
-import {isTokenExpired, showOverlay} from "./ReusableFunctions.js";
+import {authorizedFetch, isTokenExpired, showOverlay} from "./ReusableFunctions.js";
 import {createNewDeliveryModule} from "./createNewDeliveryModule.js";
 import {createProductListView} from "./createShowAllProductsModule.js";
 
 const app = document.getElementById("app");
 
 // ---------- render dashboard ----------
-export function renderDashboard() {
+export async function renderDashboard() {
+    let role = "";
+
 
     if (isTokenExpired()){
         app.innerHTML="";
         app.appendChild(createLandingPage())
         return
+    }else {
+        const user = await getUserRoll(); // wait for the promise
+        role = user.role;
     }
+
 
 
     const wrapper = document.createElement("div");
@@ -26,12 +31,12 @@ export function renderDashboard() {
     const grid = document.createElement("div");
     grid.id = "dashboard-grid";
 
+
+
     grid.appendChild(createDashboardCard("Opret produkt", function(){
        return createProductModule()
     }));
-    grid.appendChild(createDashboardCard("Opret lager", function(){
-        return createWarehouseModule()
-    }));
+
     grid.appendChild(createDashboardCard("Flyt produkt til lager", function (){
         return createProductTransferModule()
     }));
@@ -46,6 +51,15 @@ export function renderDashboard() {
     grid.appendChild(createDashboardCard("Se alle produkter", async function(){
         return await createProductListView()
     }));
+
+    if (role === "ROLE_ADMIN"){
+        grid.appendChild(createDashboardCard("Opret lager", function(){
+            return createWarehouseModule()
+        }));
+
+    }
+
+
 
     wrapper.appendChild(grid);
    return wrapper;
@@ -72,4 +86,21 @@ function createDashboardCard(title, handler) {
 }
 
 
+async function getUserRoll(){
+    const response = await authorizedFetch("http://localhost:8080/api/users/me")
+
+    if (!response.ok) {
+        // Get the response text first
+        const errorMessage = await response.text();
+        // Throw a custom error
+        throw new Error(`Fejl under indhentning af bruger: ${errorMessage}`);
+    }
+
+    return await response.json();
+
+
+
+
+
+}
 

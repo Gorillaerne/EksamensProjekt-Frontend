@@ -14,6 +14,6 @@ if (isTokenExpired()){
     app.appendChild(createLandingPage())
 }else {
     app.appendChild(await createHeader())
-    app.appendChild(renderDashboard())
+    app.appendChild(await renderDashboard())
 }
 
