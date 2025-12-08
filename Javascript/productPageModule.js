@@ -41,11 +41,6 @@ export async function createProductPageModule(productId){
     description.classList.add("pm-description");
     wrapper.appendChild(description);
 
-
-
-
-
-
     return wrapper;
 }
 
