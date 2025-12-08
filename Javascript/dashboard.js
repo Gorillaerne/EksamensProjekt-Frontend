@@ -6,6 +6,7 @@ import { createLandingPage } from "./landingPageModule.js";
 import { createLoginModule } from "./loginModule.js";
 import {isTokenExpired, showOverlay} from "./ReusableFunctions.js";
 import {createNewDeliveryModule} from "./createNewDeliveryModule.js";
+import {createProductListView} from "./createShowAllProductsModule.js";
 
 const app = document.getElementById("app");
 
@@ -34,15 +35,16 @@ export function renderDashboard() {
     grid.appendChild(createDashboardCard("Flyt produkt til lager", function (){
         return createProductTransferModule()
     }));
-    grid.appendChild(createDashboardCard("Lav beholdningsstatus", function (){
-       return  createLowQuantityListModule()
-    }));
-    grid.appendChild(createDashboardCard("Landing page", function (){
-        return createLandingPage()
+    grid.appendChild(createDashboardCard("Lav beholdningsstatus", async function (){
+       return await createLowQuantityListModule()
     }));
 
     grid.appendChild(createDashboardCard("Registrer ny leverance", function(){
         return createNewDeliveryModule()
+    }));
+
+    grid.appendChild(createDashboardCard("Se alle produkter", async function(){
+        return await createProductListView()
     }));
 
     wrapper.appendChild(grid);
@@ -60,9 +62,9 @@ function createDashboardCard(title, handler) {
     card.appendChild(text);
 
     if (typeof handler === "function") {
-        card.addEventListener("click", () => {
+        card.addEventListener("click", async() => {
             console.log(`Kører: ${title}`);
-            app.appendChild(showOverlay(handler()));
+            app.appendChild(showOverlay(await handler()));
         });
     }
 

@@ -67,7 +67,6 @@ export function createWarehouseModule() {
         const warehouse = {
             name: nameInput.value.trim(),
             description: descInput.value.trim(),
-            picture: encodedPicture || DEFAULT_IMAGE,
             address: addressInput.value.trim()
         };
 
