@@ -762,6 +762,224 @@ LOGIN MODULE — MODERN 2025
     color: #666;
 }
 
+/* ---------- YDRE RAMME ---------- */
+
+.pm-form {
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 1.5rem;
+    background: #E0DACF;                 /* beige baggrund */
+    border-radius: 8px;
+    box-sizing: border-box;
+
+    display: grid;
+    grid-template-columns: 1.05fr 1.4fr;  /* venstre: billede, højre: felter */
+    grid-template-rows: auto repeat(5, 1fr) auto;
+    grid-template-areas:
+        "header header"
+        "image  name"
+        "image  sku"
+        "image  price"
+        "image  desc"
+        "image  warehouseLabel"
+        "image  warehouse";
+    gap: 12px;
+}
+
+.pm-title {
+    grid-area: header;
+    margin: 0 0 0.5rem;
+    text-align: center;
+    font-size: 1.4rem;
+    font-weight: 600;
+}
+
+/* ---------- BILLEDE (VENSTRE SIDE) ---------- */
+
+.pm-image-field {
+    grid-area: image;
+    background: #FCFAF6;
+    border-radius: 8px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.pm-image-label {
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+.pm-image-wrapper {
+    flex: 1;
+    width: 100%;
+    border-radius: 8px;
+    aspect-ratio: 3 / 4;
+    background: #ffffff;
+    border: 1px solid #d1c7b6;
+    overflow: hidden;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pm-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    cursor: pointer;
+}
+
+.pm-image-placeholder {
+    background: #FCFAF6;
+}
+
+/* ---------- FELT-RÆKKER (HØJRE SIDE) ---------- */
+
+/* Placér de enkelte pm-field i de rigtige grid-områder
+   OBS: nth-of-type tæller DIVs direkte inde i .pm-form */
+
+.pm-form > .pm-field:nth-of-type(1) { /* pm-image-field – har egen grid-area via class */
+    /* ingen ekstra */
+}
+
+.pm-form > .pm-field:nth-of-type(2) {
+    grid-area: name;
+}
+
+.pm-form > .pm-field:nth-of-type(3) {
+    grid-area: sku;
+}
+
+.pm-form > .pm-field:nth-of-type(4) {
+    grid-area: price;
+}
+
+.pm-form > .pm-field:nth-of-type(5) {
+    grid-area: desc;
+}
+
+/* generel “boks”-stil for felterne på højre side */
+.pm-field:not(.pm-image-field) {
+    background: #FCFAF6;;
+    border-radius: 8px;
+    border: 1px solid #d1cfc3;
+    padding: 0.45rem 0.75rem;
+    box-sizing: border-box;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.pm-label {
+    font-size: 0.9rem;
+    margin-bottom: 0.25rem;
+}
+
+/* inputs inde i felterne */
+
+.pm-name,
+.pm-sku,
+.pm-price,
+.pm-description {
+    box-sizing: border-box;
+    width: 100%;
+    border: none;
+    background: #FCFAF6;
+    border-radius: 2px;
+    padding: 0.35rem 0.45rem;
+    font-size: 0.95rem;
+    font-family: inherit;
+    color: #333;
+    outline: none;
+}
+
+.pm-name:focus,
+.pm-sku:focus,
+.pm-price:focus,
+.pm-description:focus {
+    box-shadow: 0 0 0 2px rgba(179, 165, 143, 0.35);
+}
+
+/* ---------- WAREHOUSE-LABEL + LISTE NEDERST ---------- */
+
+.pm-warehouse-label {
+    grid-area: warehouseLabel;
+    text-align: center;
+    align-self: center;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #4b463d;
+}
+
+.pm-warehouse-wrapper {
+    grid-area: warehouse;
+    background: #FCFAF6;
+    border-radius: 8px;
+    border: 1px solid #d6cfc3;
+    padding: 0.75rem 1rem;
+    box-sizing: border-box;
+
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.pm-warehouse-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+}
+
+.pm-warehouse-item-name {
+    flex: 1;
+    font-size: 0.9rem;
+    color: #4b463d;
+}
+
+.pm-warehouse-item-quantity {
+    box-sizing: border-box;
+    width: 80px;
+    padding: 0.35rem 0.5rem;
+    border-radius: 2px;
+
+    border: 1px solid #d1c7b6;
+    background: #ffffff;
+    font-size: 0.9rem;
+    text-align: left;
+    outline: none;
+}
+
+.pm-warehouse-item-quantity:focus {
+    box-shadow: 0 0 0 2px rgba(179, 165, 143, 0.35);
+}
+
+/* ---------- RESPONSIV (MOBIL) ---------- */
+
+@media (max-width: 768px) {
+    .pm-form {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+            "header"
+            "image"
+            "name"
+            "sku"
+            "price"
+            "desc"
+            "warehouseLabel"
+            "warehouse";
+    }
+
+    .pm-image-field {
+        grid-row: auto;
+    }
+}
+
+
 .m-table {
     border-collapse: collapse;
     width: 100%;
