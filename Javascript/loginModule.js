@@ -83,7 +83,7 @@ export function createLoginModule() {
 
             const data = await res.json();
 
-            // Example: Save token to localStorage
+            // Save token to localStorage
             if (data.token) {
                 localStorage.setItem("token", data.token);
             }
@@ -103,4 +103,31 @@ export function createLoginModule() {
     });
 
     return wrapper;
+}
+
+// -------------------- renderLogs helper --------------------
+export function renderLogs(logs) {
+    const list = document.createElement("div");
+
+    if (!logs || logs.length === 0) {
+        list.innerHTML = "<p>Ingen logs fundet.</p>";
+        return list;
+    }
+
+    logs.forEach(log => {
+        const item = document.createElement("div");
+        item.classList.add("m-field");
+
+        // Brug de felter, der faktisk findes i databasen
+        item.innerHTML = `
+            <strong>Tid:</strong> ${log.timeStamp || "-"} <br>
+            <strong>Beskrivelse:</strong> ${log.action || "-"} <br>
+            <strong>Produkt ID:</strong> ${log.productId || "-"} <br>
+            <strong>User ID:</strong> ${log.userId || "-"}
+        `;
+
+        list.appendChild(item);
+    });
+
+    return list;
 }

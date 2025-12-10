@@ -1,4 +1,6 @@
 import {createSearchBar} from "./searchBar.js";
+import {showOverlay} from "./ReusableFunctions.js";
+import {createShowLogModule} from "./createShowLogsModule.js";
 
 export async function createHeader(){
 
@@ -15,7 +17,18 @@ export async function createHeader(){
 
 
     header.appendChild(logo);
-   header.appendChild(await createSearchBar())
+    header.appendChild(await createSearchBar())
+
+    const changesLogButton = document.createElement("button")
+    changesLogButton.textContent = "Ændrings Historik"
+    changesLogButton.classList.add("logout-btn")
+    changesLogButton.addEventListener("click", () => {
+        const component = createShowLogModule();
+        showOverlay(component);
+    })
+
+    header.appendChild(changesLogButton)
+
 
     const logoutButton = document.createElement("button")
     logoutButton.textContent = "Log ud"
