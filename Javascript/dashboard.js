@@ -58,7 +58,7 @@ export async function renderDashboard() {
             return createWarehouseModule()
         }));
 
-        grid.appendChild(createDashboardCard("Opret bruger", function(){
+        grid.appendChild(createDashboardCard("Adminstrer brugere", function(){
             return createUserModule()
         }));
 
