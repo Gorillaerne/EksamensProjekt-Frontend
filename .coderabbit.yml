@@ -1,0 +1,11 @@
+review:
+  auto_review: true
+  on_open: true
+  on_push: true
+  file_inclusions:
+    - "**/*"
+  max_files: 5000
+  max_file_size_kb: 5000
+
+general:
+  language_detection: true

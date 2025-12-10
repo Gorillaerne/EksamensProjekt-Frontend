@@ -6,6 +6,7 @@ import { createLandingPage } from "./landingPageModule.js";
 import {authorizedFetch, isTokenExpired, showOverlay} from "./ReusableFunctions.js";
 import {createNewDeliveryModule} from "./createNewDeliveryModule.js";
 import {createProductListView} from "./createShowAllProductsModule.js";
+import {createUserModule} from "./createNewUserModule.js";
 
 const app = document.getElementById("app");
 
@@ -57,7 +58,12 @@ export async function renderDashboard() {
             return createWarehouseModule()
         }));
 
+        grid.appendChild(createDashboardCard("Adminstrer brugere", function(){
+            return createUserModule()
+        }));
+
     }
+
 
 
 
