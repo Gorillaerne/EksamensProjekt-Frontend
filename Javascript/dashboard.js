@@ -6,6 +6,7 @@ import { createLandingPage } from "./landingPageModule.js";
 import {authorizedFetch, isTokenExpired, showOverlay} from "./ReusableFunctions.js";
 import {createNewDeliveryModule} from "./createNewDeliveryModule.js";
 import {createProductListView} from "./createShowAllProductsModule.js";
+import {createUserModule} from "./createNewUserModule.js";
 
 const app = document.getElementById("app");
 
@@ -55,6 +56,10 @@ export async function renderDashboard() {
     if (role === "ROLE_ADMIN"){
         grid.appendChild(createDashboardCard("Opret lager", function(){
             return createWarehouseModule()
+        }));
+
+        grid.appendChild(createDashboardCard("Opret bruger", function(){
+            return createUserModule()
         }));
 
     }
