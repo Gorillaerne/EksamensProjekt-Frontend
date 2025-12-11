@@ -102,6 +102,15 @@ export async function createSearchBar() {
         searchBar.addEventListener("input", () => {
             updateResults(searchBar.value);
         });
+        searchBar.addEventListener("click", () => {
+            updateResults(searchBar.value)
+        })
+
+        document.addEventListener("click", (e) => {
+            if (!wrapper.contains(e.target)) {
+                resultBox.style.display = "none";
+            }
+        });
 
         return wrapper;
     } catch (err) {
