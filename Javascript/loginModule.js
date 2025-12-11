@@ -1,4 +1,4 @@
-import { authorizedFetch } from "./ReusableFunctions.js";
+import {authorizedFetch, showNotification} from "./ReusableFunctions.js";
 
 export function createLoginModule() {
 
@@ -68,7 +68,7 @@ export function createLoginModule() {
 
         try {
             const res = await authorizedFetch(
-                "http://localhost:8080/api/users/login",
+                "/api/users/login",
                 {
                     method: "POST",
                     body: JSON.stringify(loginPayload)
@@ -76,9 +76,7 @@ export function createLoginModule() {
             );
 
             if (!res.ok) {
-                msg.textContent = "Login fejlede: " + (await res.text());
-                msg.className = "m-message m-error";
-                return;
+                return showNotification(await res.text(),"error",5000);
             }
 
             const data = await res.json();
@@ -96,8 +94,8 @@ export function createLoginModule() {
             }, 300);
 
         } catch (err) {
-            msg.textContent = "Netværksfejl – kunne ikke logge ind.";
-            msg.className = "m-message m-error";
+            return showNotification("Netværksfejl – kunne ikke logge ind","error",5000);
+
             console.error(err);
         }
     });

@@ -1,4 +1,4 @@
-import { authorizedFetch } from "./ReusableFunctions.js";
+import {authorizedFetch, showNotification} from "./ReusableFunctions.js";
 
 export async function createProductListView() {
     const wrapper = document.createElement("div");
@@ -22,13 +22,18 @@ export async function createProductListView() {
 
     // INNER METHOD: Preload product data
     async function preloadProducts() {
-        const res = await authorizedFetch("http://localhost:8080/api/products/dto");
+        try {
+            const res = await authorizedFetch("/api/products/dto");
 
-        if (!res.ok) {
-            throw new Error("Kunne ikke hente produkter");
+            if (!res.ok) {
+                return showNotification(await res.text(),"error",5000);
+            }
+
+            return await res.json();
+        }catch (e) {
+            return showNotification("Netværksfejl - kunne ikke oprette forbindelse til backend","error",5000);
         }
 
-        return await res.json();
     }
 
     try {

@@ -1,12 +1,13 @@
-import { authorizedFetch } from "./ReusableFunctions.js";
+import {authorizedFetch, showNotification} from "./ReusableFunctions.js";
 
 export async function createProductPageModule(productId) {
 
-    const response = await authorizedFetch("http://localhost:8080/api/products/" + productId);
+
+    const response = await authorizedFetch("/api/products/" + productId);
 
     if (!response.ok) {
         console.error("Kunne ikke hente produkt:", response.status);
-        return;
+        return showNotification(await response.text(),"error",5000);
     }
 
     const product = await response.json();
@@ -66,13 +67,13 @@ export async function createProductPageModule(productId) {
                 picture: dataUrl
             };
 
-            const response = await authorizedFetch("http://localhost:8080/api/products/" + productId, {
+            const response = await authorizedFetch("/api/products/" + productId, {
                 method: "PATCH",
                 body: JSON.stringify(objectToSend),
             });
 
             if (!response.ok) {
-                console.error("Fejl ved opdatering af billede: " + await response.text());
+                return showNotification(await response.text(),"error",5000);
             } else {
                 console.log("Billede opdateret");
             }
@@ -123,7 +124,7 @@ export async function createProductPageModule(productId) {
 
             try {
                 const warehouseProductResponse = await authorizedFetch(
-                    "http://localhost:8080/api/warehouseproducts",
+                    "/api/warehouseproducts",
                     {
                         method: "PATCH",
                         body: JSON.stringify(patchWarehouseProduct)
@@ -131,10 +132,10 @@ export async function createProductPageModule(productId) {
                 );
 
                 if (!warehouseProductResponse.ok) {
-                    throw new Error(await warehouseProductResponse.text());
+                    return showNotification(await warehouseProductResponse.text(),"error",5000);
                 }
             } catch (e) {
-                console.error("Fejl ved opdatering af lager:", e);
+                return showNotification("Netværksfejl - kunne ikke oprette forbindelse til backend","error",5000);
             }
         });
 
@@ -175,15 +176,18 @@ function createBlurlistenerForInput(input, productId) {
             [input.dataset.variableName]: input.value
         };
 
-        const response = await authorizedFetch("http://localhost:8080/api/products/" + productId, {
-            method: "PATCH",
-            body: JSON.stringify(objectToSend),
-        });
+        try {
+            const response = await authorizedFetch("/api/products/" + productId, {
+                method: "PATCH",
+                body: JSON.stringify(objectToSend),
+            });
 
-        if (!response.ok) {
-            console.error("Nej " + await response.text());
-        } else {
-            console.log("lets go");
+            if (!response.ok) {
+                return showNotification(await response.text(),"error",5000);
+            }
+        }catch (e){
+            return showNotification("Netværksfejl - kunne ikke oprette forbindelse til backend","error",5000);
         }
+
     });
 }

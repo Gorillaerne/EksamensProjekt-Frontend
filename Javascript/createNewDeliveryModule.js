@@ -1,4 +1,4 @@
-import { authorizedFetch } from "./ReusableFunctions.js";
+import {authorizedFetch, showNotification} from "./ReusableFunctions.js";
 
 export function createNewDeliveryModule() {
     // MAIN WRAPPER
@@ -48,17 +48,19 @@ export function createNewDeliveryModule() {
 
     async function preloadData() {
         try {
-            const productRes = await authorizedFetch("http://localhost:8080/api/products/searchBar");
-            if (productRes.ok) {
-                allProducts = await productRes.json();
+            const productRes = await authorizedFetch("/api/products/searchBar");
+            if (!productRes.ok) {
+               return showNotification(await productRes.text(),"error",5000);
+            }
+            allProducts = await productRes.json();
+            const warehouseRes = await authorizedFetch("/api/warehouses/dto");
+            if (!warehouseRes.ok) {
+                return showNotification(await warehouseRes.text(),"error",5000);
             }
 
-            const warehouseRes = await authorizedFetch("http://localhost:8080/api/warehouses/dto");
-            if (warehouseRes.ok) {
-                allWarehouses = await warehouseRes.json();
-            }
+            allWarehouses = await warehouseRes.json();
         } catch (err) {
-            console.error("Fejl ved preload:", err);
+            showNotification("Netværksfejl - kunne ikke oprette forbindelse til backend", "error", 5000);
         }
     }
 
@@ -184,7 +186,7 @@ export function createNewDeliveryModule() {
 
         try {
             const res = await authorizedFetch(
-                "http://localhost:8080/api/products/delivery",
+                "/api/products/delivery",
                 {
                     method: "POST",
                     body: JSON.stringify(products)
@@ -192,17 +194,14 @@ export function createNewDeliveryModule() {
             );
 
             if (!res.ok) {
-                msg.textContent = "Fejl: " + (await res.text());
-                msg.className = "m-message m-error";
-                return;
+                showNotification(await res.text(),"error",5000);
             }
 
             msg.textContent = "Leveringen blev oprettet!";
             msg.className = "m-message m-success";
 
         } catch (err) {
-            msg.textContent = "Netværksfejl – kunne ikke oprette levering.";
-            msg.className = "m-message m-error";
+            showNotification("Netværksfejl - kunne ikke oprette forbindelse til backend","error",5000)
             console.error(err);
         }
     });
