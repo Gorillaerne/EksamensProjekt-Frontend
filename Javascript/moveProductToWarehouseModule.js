@@ -1,4 +1,4 @@
-import { authorizedFetch } from "./ReusableFunctions.js";
+import {authorizedFetch, showNotification} from "./ReusableFunctions.js";
 
 export function createProductTransferModule() {
 
@@ -64,19 +64,31 @@ export function createProductTransferModule() {
 
         try {
             const res = await authorizedFetch(
-                `http://localhost:8080/api/warehousetransfer/${warehouseId}/product/${productId}/quantity`
+                `/api/warehousetransfer/${warehouseId}/product/${productId}/quantity`
             );
+
+            if (!res.ok){
+                return showNotification(await res.text(),"error",5000);
+            }
             const qty = await res.json();
             stockBox.textContent = `Lagerbeholdning: ${qty}`;
         } catch (err) {
+
             stockBox.textContent = "Lagerbeholdning: N/A";
+
+            return showNotification("Netværksfejl - kunne ikke oprette forbindelse til backend","error",5000);
         }
     }
 
     // FETCH DATA (products & warehouses)
     async function loadData() {
         try {
-            const prodRes = await authorizedFetch("http://localhost:8080/api/products");
+            const prodRes = await authorizedFetch("/api/products");
+
+
+            if (!prodRes.ok){
+                return showNotification(await prodRes.text(),"error",5000);
+            }
             const products = await prodRes.json();
             products.forEach(p => {
                 const opt = document.createElement("option");
@@ -85,7 +97,11 @@ export function createProductTransferModule() {
                 productSelect.appendChild(opt);
             });
 
-            const whRes = await authorizedFetch("http://localhost:8080/api/warehouses");
+            const whRes = await authorizedFetch("/api/warehouses");
+
+            if (!whRes.ok){
+                return showNotification(await whRes.text(),"error",5000);
+            }
             const warehouses = await whRes.json();
             warehouses.forEach(w => {
                 const opt1 = document.createElement("option");
@@ -100,8 +116,7 @@ export function createProductTransferModule() {
             // Når hentet → prøv at vise initial stock
             updateStockDisplay();
         } catch (err) {
-            msg.textContent = "Kunne ikke hente data fra server.";
-            msg.className = "m-message m-error";
+            return showNotification("Netværksfejl - Kunne ikke hente data fra server.","error",5000);
         }
     }
     loadData();
@@ -143,7 +158,7 @@ export function createProductTransferModule() {
         }
 
         try {
-            const res = await authorizedFetch("http://localhost:8080/api/warehousetransfer", {
+            const res = await authorizedFetch("/api/warehousetransfer", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(request)
@@ -151,9 +166,7 @@ export function createProductTransferModule() {
 
 
             if (!res.ok) {
-                msg.textContent = "Fejl: " + (await res.text());
-                msg.className = "m-message m-error";
-                return;
+                return showNotification(await res.text(),"error",5000);
             }
 
             msg.textContent = "Produktet blev flyttet!";
@@ -163,8 +176,8 @@ export function createProductTransferModule() {
             updateStockDisplay(); // 🔄 Opdatér beholdning efter flytning
 
         } catch (err) {
-            msg.textContent = "Netværksfejl – kunne ikke flytte produktet.";
-            msg.className = "m-message m-error";
+            return showNotification("Netværksfejl - kunne ikke oprette forbindelse til backend","error",5000);
+
         }
     });
 

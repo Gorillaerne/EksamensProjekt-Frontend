@@ -1,4 +1,4 @@
-import { authorizedFetch } from "./ReusableFunctions.js";
+import {authorizedFetch, showNotification} from "./ReusableFunctions.js";
 
 export function createUserModule() {
     const wrapper = document.createElement("div");
@@ -77,8 +77,8 @@ export function createUserModule() {
 
     async function loadUsers() {
         try {
-            const res = await authorizedFetch("http://localhost:8080/api/users");
-            if (!res.ok) throw new Error(await res.text());
+            const res = await authorizedFetch("/api/users");
+            if (!res.ok) return showNotification(await res.text(),"error",5000);
 
             const users = await res.json();
             userListWrapper.innerHTML = "";
@@ -107,11 +107,11 @@ export function createUserModule() {
                 deleteBtn.addEventListener("click", async () => {
                     if (!confirm(`Er du sikker på, du vil slette ${user.username}?`)) return;
                     try {
-                        const delRes = await authorizedFetch(`http://localhost:8080/api/users/${user.id}`, { method: "DELETE" });
-                        if (!delRes.ok) throw new Error(await delRes.text());
+                        const delRes = await authorizedFetch(`/api/users/${user.id}`, { method: "DELETE" });
+                        if (!delRes.ok)return  showNotification(await delRes.text(),"error",5000);
                         loadUsers();
                     } catch (err) {
-                        alert("Kunne ikke slette brugeren: " + err.message);
+                        showNotification("Netværksfejl - kunne ikke oprette forbindelse til backend","error",5000)
                         console.error(err);
                     }
                 });
@@ -121,7 +121,7 @@ export function createUserModule() {
                 userListWrapper.appendChild(userCard);
             });
         } catch (err) {
-            userListWrapper.textContent = "Kunne ikke hente brugere.";
+            showNotification("Netværksfejl - kunne ikke oprette forbindelse til backend","error",5000)
             console.error(err);
         }
     }
@@ -143,16 +143,14 @@ export function createUserModule() {
         }
 
         try {
-            const res = await authorizedFetch("http://localhost:8080/api/users", {
+            const res = await authorizedFetch("/api/users", {
                 method: "POST",
                 body: JSON.stringify(user),
                 headers: { "Content-Type": "application/json" }
             });
 
             if (!res.ok) {
-                msg.textContent = "Fejl: " + (await res.text());
-                msg.className = "m-message m-error";
-                return;
+               return showNotification(await res.text(),"error",5000)
             }
 
             msg.textContent = "Brugeren blev oprettet!";
@@ -165,8 +163,7 @@ export function createUserModule() {
 
             loadUsers();
         } catch (err) {
-            msg.textContent = "Netværksfejl – kunne ikke oprette brugeren.";
-            msg.className = "m-message m-error";
+            showNotification("Netværksfejl – kunne ikke oprette forbindelse til backend","error",5000)
             console.error(err);
         }
     });
