@@ -19,9 +19,7 @@ export async function createProductPageModule(productId) {
     title.textContent = "Produktside";
     title.classList.add("pm-title");
     wrapper.appendChild(title);
-
-    /* ---------- BILLEDE ---------- */
-
+    
     const imageField = document.createElement("div");
     imageField.classList.add("pm-field", "pm-image-field");
 
@@ -32,11 +30,9 @@ export async function createProductPageModule(productId) {
     img.classList.add("pm-image");
     img.alt = product.name ?? "Produktbillede";
 
-    // hvis der allerede er et billede i databasen (base64 data URL)
     if (product.picture) {
         img.src = product.picture;
     } else {
-        // fallback (kan styles i CSS)
         img.src = "";
         img.classList.add("pm-image-placeholder");
     }
@@ -44,19 +40,16 @@ export async function createProductPageModule(productId) {
     imageWrapper.appendChild(img);
     imageField.appendChild(imageWrapper);
 
-    // skjult file input til upload
     const fileInput = document.createElement("input");
     fileInput.type = "file";
     fileInput.accept = "image/*";
     fileInput.style.display = "none";
     imageField.appendChild(fileInput);
 
-    // klik på billedet åbner file chooser
     img.addEventListener("click", () => {
         fileInput.click();
     });
 
-    // når der vælges et nyt billede
     fileInput.addEventListener("change", async () => {
         const file = fileInput.files[0];
         if (!file) return;
@@ -64,13 +57,11 @@ export async function createProductPageModule(productId) {
         const reader = new FileReader();
 
         reader.onload = async (e) => {
-            const dataUrl = e.target.result; // "data:image/...;base64,...."
+            const dataUrl = e.target.result;
 
-            // opdater billede i UI med det samme
             img.src = dataUrl;
             img.classList.remove("pm-image-placeholder");
 
-            // PATCH til backend ligesom de andre felter
             const objectToSend = {
                 picture: dataUrl
             };
@@ -92,25 +83,19 @@ export async function createProductPageModule(productId) {
 
     wrapper.appendChild(imageField);
 
-    /* ---------- NAME ---------- */
     wrapper.appendChild(createLabeledInput("Navn", product.name, "name", "pm-name", productId));
 
-    /* ---------- SKU ---------- */
     wrapper.appendChild(createLabeledInput("SKU-Nummer", product.SKU ?? product.sku ?? "", "SKU", "pm-sku", productId));
 
-    /* ---------- PRICE ---------- */
     wrapper.appendChild(createLabeledInput("Pris", product.price, "price", "pm-price", productId, "number"));
 
-    /* ---------- DESCRIPTION ---------- */
     wrapper.appendChild(createLabeledInput("Beskrivelse", product.description ?? "", "description", "pm-description", productId));
 
-    /* ---------- WAREHOUSE LIST LABEL ---------- */
     const warehouseLabel = document.createElement("label");
     warehouseLabel.textContent = "Lagerbeholdning";
     warehouseLabel.classList.add("pm-warehouse-label");
     wrapper.appendChild(warehouseLabel);
 
-    /* ---------- WAREHOUSE LIST ---------- */
     const warehouseQuantityWrapper = document.createElement("div");
     warehouseQuantityWrapper.classList.add("pm-warehouse-wrapper");
 
@@ -162,8 +147,6 @@ export async function createProductPageModule(productId) {
     return wrapper;
 }
 
-/* ---------- REUSABLE LABELED INPUT BUILDER ---------- */
-
 function createLabeledInput(labelText, value, variableName, className, productId, type = "text") {
     const container = document.createElement("div");
     container.classList.add("pm-field");
@@ -185,8 +168,6 @@ function createLabeledInput(labelText, value, variableName, className, productId
 
     return container;
 }
-
-/* ---------- PATCH LISTENER ---------- */
 
 function createBlurlistenerForInput(input, productId) {
     input.addEventListener("blur", async function () {
