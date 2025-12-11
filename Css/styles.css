@@ -1150,3 +1150,49 @@ LOGIN MODULE — MODERN 2025
         flex-direction: column;
     }
 }
+/* Container for all notifications */
+#notification-container {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    pointer-events: none; /* allows clicks to pass through when needed */
+}
+
+/* Individual notification box */
+.notification {
+    min-width: 250px;
+    margin-bottom: 10px;
+    padding: 15px 20px;
+    border-radius: 8px;
+    color: #fff;
+    font-family: sans-serif;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    opacity: 0;
+    transform: translateY(-20px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: auto;
+}
+
+/* Show notification */
+.notification.show {
+    opacity: 0.95;
+    transform: translateY(0);
+}
+
+/* Notification types */
+.notification.success {
+    background-color: #38a169; /* green */
+}
+
+.notification.error {
+    background-color: #e53e3e; /* red */
+}
+
+.notification.info {
+    background-color: #3182ce; /* blue */
+}
