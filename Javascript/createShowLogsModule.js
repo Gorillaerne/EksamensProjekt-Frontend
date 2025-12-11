@@ -47,7 +47,7 @@ export function createShowLogModule() {
     }
 
     async function fetchLogsForProduct(productId) {
-        const res = await authorizedFetch(`/logs/product/${productId}`);
+        const res = await authorizedFetch(`/api/logs/product/${productId}`);
         return res.ok ? res.json() :  showNotification(await res.text(),"error",5000);
     }
 
