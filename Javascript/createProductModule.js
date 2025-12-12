@@ -131,6 +131,10 @@ export function createProductModule() {
             msg.textContent = "Produktet blev oprettet!";
             msg.className = "m-message m-success";
 
+            setTimeout(() => {
+                location.reload();
+            }, 500);
+
         } catch (err) {
             showNotification("Netværksfejl – Kunne ikke oprette forbindelse til backend","error",5000)
             console.error(err);

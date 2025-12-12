@@ -1196,3 +1196,40 @@ LOGIN MODULE — MODERN 2025
 .notification.info {
     background-color: #3182ce; /* blue */
 }
+
+.pm-form {
+    position: relative;
+}
+
+/* Delete-knap placeret helt fast i øverste venstre hjørne */
+.pm-delete-btn {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+
+    padding: 6px 12px;
+    border: none;
+    border-radius: 8px;
+
+    background-color: #FCFAF6;
+    color: black;
+    font-weight: 600;
+    cursor: pointer;
+
+    box-shadow: 0 2px 6px rgba(0,0,0,0.18);
+    transition: background-color 0.15s ease, transform 0.1s ease;
+}
+
+.pm-delete-btn:hover {
+    background-color: #E0DACF;
+    transform: translateY(-1px);
+}
+
+.pm-delete-btn:active {
+    transform: scale(0.97);
+}
+
+.pm-delete-btn[aria-busy="true"] {
+    opacity: 0.7;
+    cursor: wait;
+}
