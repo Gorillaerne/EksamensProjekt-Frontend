@@ -16,6 +16,8 @@ export async function createProductPageModule(productId) {
     const wrapper = document.createElement("div");
     wrapper.classList.add("pm-form");
 
+    createDeleteButton(productId, wrapper);
+
     const title = document.createElement("h2");
     title.textContent = "Produktside";
     title.classList.add("pm-title");
@@ -144,6 +146,88 @@ export async function createProductPageModule(productId) {
     return wrapper;
 }
 
+function createDeleteButton(productId, wrapper) {
+    const deleteBtn = document.createElement("button");
+    deleteBtn.type = "button";
+    deleteBtn.classList.add("pm-delete-btn");
+    deleteBtn.title = "Slet produkt";
+    deleteBtn.innerHTML = 'Slet';
+
+    deleteBtn.addEventListener("click", async (e) => {
+        e.stopPropagation();
+        const ok = confirm("Er du sikker på, at du vil slette dette produkt?");
+        if (!ok) return;
+
+        deleteBtn.disabled = true;
+        deleteBtn.setAttribute("aria-busy", "true");
+        const previousText = deleteBtn.innerHTML;
+        deleteBtn.innerHTML = "Sletter…";
+
+        try {
+            await handleDelete(productId, wrapper, deleteBtn, previousText);
+        } finally {
+
+            if (!deleteBtn.disabled) {
+
+            }
+        }
+    });
+
+    wrapper.appendChild(deleteBtn);
+    return deleteBtn;
+}
+
+async function handleDelete(productId, wrapper, deleteBtn, previousText) {
+    try {
+        const response = await authorizedFetch("/api/products/" + productId, {
+            method: "DELETE"
+        });
+
+        let bodyText = "";
+        try {
+            bodyText = await response.text();
+        } catch (e) {
+            bodyText = "<kunne ikke læse response body>";
+        }
+
+        if (response.ok) {
+            showNotification("Produktet er slettet.", "success", 2000);
+
+            const overlay = document.querySelector('.blur-overlay') || document.querySelector('.overlay');
+            if (overlay) overlay.remove();
+
+            document.body.classList.remove('blurred');
+
+            setTimeout(() => {
+                location.reload();
+            }, 500);
+
+        } else {
+
+            console.error("Delete request failed", {
+                status: response.status,
+                statusText: response.statusText,
+                body: bodyText
+            });
+
+            showNotification(bodyText || `Fejl ved slet (status ${response.status})`, "error", 6000);
+
+            deleteBtn.disabled = false;
+            deleteBtn.removeAttribute("aria-busy");
+            deleteBtn.innerHTML = previousText;
+        }
+    } catch (err) {
+        console.error("Network or unexpected error during delete:", err);
+        showNotification("Netværksfejl - kunne ikke slette produktet.", "error", 6000);
+
+        deleteBtn.disabled = false;
+        deleteBtn.removeAttribute("aria-busy");
+        deleteBtn.innerHTML = previousText;
+    }
+}
+
+
+
 function createLabeledInput(labelText, value, variableName, className, productId, type = "text") {
     const container = document.createElement("div");
     container.classList.add("pm-field");
@@ -186,3 +270,4 @@ function createBlurlistenerForInput(input, productId) {
         }
     });
 }
+
