@@ -83,13 +83,9 @@ export async function createProductPageModule(productId) {
     });
 
     wrapper.appendChild(imageField);
-
     wrapper.appendChild(createLabeledInput("Navn", product.name, "name", "pm-name", productId));
-
     wrapper.appendChild(createLabeledInput("SKU-Nummer", product.SKU ?? product.sku ?? "", "SKU", "pm-sku", productId));
-
     wrapper.appendChild(createLabeledInput("Pris", product.price, "price", "pm-price", productId, "number"));
-
     wrapper.appendChild(createLabeledInput("Beskrivelse", product.description ?? "", "description", "pm-description", productId));
 
     const warehouseLabel = document.createElement("label");
@@ -188,6 +184,5 @@ function createBlurlistenerForInput(input, productId) {
         }catch (e){
             return showNotification("Netværksfejl - kunne ikke oprette forbindelse til backend","error",5000);
         }
-
     });
 }
