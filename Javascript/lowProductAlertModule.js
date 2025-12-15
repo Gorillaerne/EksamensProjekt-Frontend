@@ -1,4 +1,4 @@
-import { authorizedFetch } from "./ReusableFunctions.js";
+import {authorizedFetch, showNotification} from "./ReusableFunctions.js";
 
 export async function createLowQuantityListModule() {
 
@@ -23,12 +23,10 @@ export async function createLowQuantityListModule() {
 
     async function loadLowQtyProducts() {
         try {
-            const res = await authorizedFetch("http://localhost:8080/api/warehouses/lowQty");
+            const res = await authorizedFetch("/api/warehouses/lowQty");
 
             if (!res.ok) {
-                msg.textContent = "Kunne ikke hente produkter.";
-                msg.classList.add("m-error");
-                return;
+                return showNotification(await res.text(),"error",5000);
             }
 
             const data = await res.json();
@@ -57,9 +55,7 @@ export async function createLowQuantityListModule() {
 
         } catch
             (e) {
-            console.log(e)
-            msg.textContent = "Netværksfejl – kunne ikke hente data.";
-            msg.classList.add("m-error");
+            return showNotification("Netværksfejl – kunne ikke hente data.","error",5000);
         }
     }
 

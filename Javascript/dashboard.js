@@ -3,7 +3,7 @@ import { createWarehouseModule } from "./createWarehouseModule.js";
 import { createProductTransferModule } from "./moveProductToWarehouseModule.js";
 import { createLowQuantityListModule } from "./lowProductAlertModule.js";
 import { createLandingPage } from "./landingPageModule.js";
-import {authorizedFetch, isTokenExpired, showOverlay} from "./ReusableFunctions.js";
+import {authorizedFetch, isTokenExpired, showNotification, showOverlay} from "./ReusableFunctions.js";
 import {createNewDeliveryModule} from "./createNewDeliveryModule.js";
 import {createProductListView} from "./createShowAllProductsModule.js";
 import {createUserModule} from "./createNewUserModule.js";
@@ -93,16 +93,22 @@ function createDashboardCard(title, handler) {
 
 
 async function getUserRoll(){
-    const response = await authorizedFetch("http://localhost:8080/api/users/me")
+    try {
+        const response = await authorizedFetch("/api/users/me")
 
-    if (!response.ok) {
-        // Get the response text first
-        const errorMessage = await response.text();
-        // Throw a custom error
-        throw new Error(`Fejl under indhentning af bruger: ${errorMessage}`);
+        if (!response.ok) {
+            // Get the response text first
+            const errorMessage = await response.text();
+            return showNotification(errorMessage,"error",5000);
+            // Throw a custom error
+        }
+
+        return await response.json();
+
+    }catch (e){
+
+        return showNotification("Netværksfejl - kunne ikke oprette forbindelse til backend","error",5000);
     }
-
-    return await response.json();
 
 
 

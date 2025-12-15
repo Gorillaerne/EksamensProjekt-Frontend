@@ -1,12 +1,13 @@
-import { authorizedFetch } from "./ReusableFunctions.js";
+import {authorizedFetch, showNotification} from "./ReusableFunctions.js";
 
 export async function createProductPageModule(productId) {
 
-    const response = await authorizedFetch("http://localhost:8080/api/products/" + productId);
+
+    const response = await authorizedFetch("/api/products/" + productId);
 
     if (!response.ok) {
         console.error("Kunne ikke hente produkt:", response.status);
-        return;
+        return showNotification(await response.text(),"error",5000);
     }
 
     const product = await response.json();
@@ -15,13 +16,13 @@ export async function createProductPageModule(productId) {
     const wrapper = document.createElement("div");
     wrapper.classList.add("pm-form");
 
+    createDeleteButton(productId, wrapper);
+
     const title = document.createElement("h2");
     title.textContent = "Produktside";
     title.classList.add("pm-title");
     wrapper.appendChild(title);
-
-    /* ---------- BILLEDE ---------- */
-
+    
     const imageField = document.createElement("div");
     imageField.classList.add("pm-field", "pm-image-field");
 
@@ -32,11 +33,9 @@ export async function createProductPageModule(productId) {
     img.classList.add("pm-image");
     img.alt = product.name ?? "Produktbillede";
 
-    // hvis der allerede er et billede i databasen (base64 data URL)
     if (product.picture) {
         img.src = product.picture;
     } else {
-        // fallback (kan styles i CSS)
         img.src = "";
         img.classList.add("pm-image-placeholder");
     }
@@ -44,19 +43,16 @@ export async function createProductPageModule(productId) {
     imageWrapper.appendChild(img);
     imageField.appendChild(imageWrapper);
 
-    // skjult file input til upload
     const fileInput = document.createElement("input");
     fileInput.type = "file";
     fileInput.accept = "image/*";
     fileInput.style.display = "none";
     imageField.appendChild(fileInput);
 
-    // klik på billedet åbner file chooser
     img.addEventListener("click", () => {
         fileInput.click();
     });
 
-    // når der vælges et nyt billede
     fileInput.addEventListener("change", async () => {
         const file = fileInput.files[0];
         if (!file) return;
@@ -64,24 +60,22 @@ export async function createProductPageModule(productId) {
         const reader = new FileReader();
 
         reader.onload = async (e) => {
-            const dataUrl = e.target.result; // "data:image/...;base64,...."
+            const dataUrl = e.target.result;
 
-            // opdater billede i UI med det samme
             img.src = dataUrl;
             img.classList.remove("pm-image-placeholder");
 
-            // PATCH til backend ligesom de andre felter
             const objectToSend = {
                 picture: dataUrl
             };
 
-            const response = await authorizedFetch("http://localhost:8080/api/products/" + productId, {
+            const response = await authorizedFetch("/api/products/" + productId, {
                 method: "PATCH",
                 body: JSON.stringify(objectToSend),
             });
 
             if (!response.ok) {
-                console.error("Fejl ved opdatering af billede: " + await response.text());
+                return showNotification(await response.text(),"error",5000);
             } else {
                 console.log("Billede opdateret");
             }
@@ -91,26 +85,16 @@ export async function createProductPageModule(productId) {
     });
 
     wrapper.appendChild(imageField);
-
-    /* ---------- NAME ---------- */
     wrapper.appendChild(createLabeledInput("Navn", product.name, "name", "pm-name", productId));
-
-    /* ---------- SKU ---------- */
     wrapper.appendChild(createLabeledInput("SKU-Nummer", product.SKU ?? product.sku ?? "", "SKU", "pm-sku", productId));
-
-    /* ---------- PRICE ---------- */
     wrapper.appendChild(createLabeledInput("Pris", product.price, "price", "pm-price", productId, "number"));
-
-    /* ---------- DESCRIPTION ---------- */
     wrapper.appendChild(createLabeledInput("Beskrivelse", product.description ?? "", "description", "pm-description", productId));
 
-    /* ---------- WAREHOUSE LIST LABEL ---------- */
     const warehouseLabel = document.createElement("label");
     warehouseLabel.textContent = "Lagerbeholdning";
     warehouseLabel.classList.add("pm-warehouse-label");
     wrapper.appendChild(warehouseLabel);
 
-    /* ---------- WAREHOUSE LIST ---------- */
     const warehouseQuantityWrapper = document.createElement("div");
     warehouseQuantityWrapper.classList.add("pm-warehouse-wrapper");
 
@@ -138,7 +122,7 @@ export async function createProductPageModule(productId) {
 
             try {
                 const warehouseProductResponse = await authorizedFetch(
-                    "http://localhost:8080/api/warehouseproducts",
+                    "/api/warehouseproducts",
                     {
                         method: "PATCH",
                         body: JSON.stringify(patchWarehouseProduct)
@@ -146,10 +130,10 @@ export async function createProductPageModule(productId) {
                 );
 
                 if (!warehouseProductResponse.ok) {
-                    throw new Error(await warehouseProductResponse.text());
+                    return showNotification(await warehouseProductResponse.text(),"error",5000);
                 }
             } catch (e) {
-                console.error("Fejl ved opdatering af lager:", e);
+                return showNotification("Netværksfejl - kunne ikke oprette forbindelse til backend","error",5000);
             }
         });
 
@@ -162,7 +146,87 @@ export async function createProductPageModule(productId) {
     return wrapper;
 }
 
-/* ---------- REUSABLE LABELED INPUT BUILDER ---------- */
+function createDeleteButton(productId, wrapper) {
+    const deleteBtn = document.createElement("button");
+    deleteBtn.type = "button";
+    deleteBtn.classList.add("pm-delete-btn");
+    deleteBtn.title = "Slet produkt";
+    deleteBtn.innerHTML = 'Slet';
+
+    deleteBtn.addEventListener("click", async (e) => {
+        e.stopPropagation();
+        const ok = confirm("Er du sikker på, at du vil slette dette produkt?");
+        if (!ok) return;
+
+        deleteBtn.disabled = true;
+        deleteBtn.setAttribute("aria-busy", "true");
+        const previousText = deleteBtn.innerHTML;
+        deleteBtn.innerHTML = "Sletter…";
+
+        try {
+            await handleDelete(productId, wrapper, deleteBtn, previousText);
+        } finally {
+
+            if (!deleteBtn.disabled) {
+
+            }
+        }
+    });
+
+    wrapper.appendChild(deleteBtn);
+    return deleteBtn;
+}
+
+async function handleDelete(productId, wrapper, deleteBtn, previousText) {
+    try {
+        const response = await authorizedFetch("/api/products/" + productId, {
+            method: "DELETE"
+        });
+
+        let bodyText = "";
+        try {
+            bodyText = await response.text();
+        } catch (e) {
+            bodyText = "<kunne ikke læse response body>";
+        }
+
+        if (response.ok) {
+            showNotification("Produktet er slettet.", "success", 2000);
+
+            const overlay = document.querySelector('.blur-overlay') || document.querySelector('.overlay');
+            if (overlay) overlay.remove();
+
+            document.body.classList.remove('blurred');
+
+            setTimeout(() => {
+                location.reload();
+            }, 500);
+
+        } else {
+
+            console.error("Delete request failed", {
+                status: response.status,
+                statusText: response.statusText,
+                body: bodyText
+            });
+
+            showNotification(bodyText || `Fejl ved slet (status ${response.status})`, "error", 6000);
+
+            deleteBtn.disabled = false;
+            deleteBtn.removeAttribute("aria-busy");
+            deleteBtn.innerHTML = previousText;
+        }
+    } catch (err) {
+        console.error("Network or unexpected error during delete:", err);
+        showNotification("Netværksfejl - kunne ikke slette produktet.", "error", 6000);
+
+        deleteBtn.disabled = false;
+        deleteBtn.removeAttribute("aria-busy");
+        deleteBtn.innerHTML = previousText;
+    }
+}
+
+
 
 function createLabeledInput(labelText, value, variableName, className, productId, type = "text") {
     const container = document.createElement("div");
@@ -186,23 +250,24 @@ function createLabeledInput(labelText, value, variableName, className, productId
     return container;
 }
 
-/* ---------- PATCH LISTENER ---------- */
-
 function createBlurlistenerForInput(input, productId) {
     input.addEventListener("blur", async function () {
         const objectToSend = {
             [input.dataset.variableName]: input.value
         };
 
-        const response = await authorizedFetch("http://localhost:8080/api/products/" + productId, {
-            method: "PATCH",
-            body: JSON.stringify(objectToSend),
-        });
+        try {
+            const response = await authorizedFetch("/api/products/" + productId, {
+                method: "PATCH",
+                body: JSON.stringify(objectToSend),
+            });
 
-        if (!response.ok) {
-            console.error("Nej " + await response.text());
-        } else {
-            console.log("lets go");
+            if (!response.ok) {
+                return showNotification(await response.text(),"error",5000);
+            }
+        }catch (e){
+            return showNotification("Netværksfejl - kunne ikke oprette forbindelse til backend","error",5000);
         }
     });
 }
+

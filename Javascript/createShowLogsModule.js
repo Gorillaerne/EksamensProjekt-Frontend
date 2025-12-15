@@ -1,4 +1,4 @@
-import { authorizedFetch } from "./ReusableFunctions.js";
+import {authorizedFetch, showNotification} from "./ReusableFunctions.js";
 
 export function createShowLogModule() {
     const wrapper = document.createElement("div");
@@ -32,23 +32,23 @@ export function createShowLogModule() {
 
     // ------------------- API HELPERS -------------------
     async function fetchAllUsers() {
-        const res = await authorizedFetch("http://localhost:8080/api/users");
-        return res.ok ? res.json() : [];
+        const res = await authorizedFetch("/api/users");
+        return res.ok ? res.json() :  showNotification(await res.text(),"error",5000);
     }
 
     async function fetchAllProducts() {
-        const res = await authorizedFetch("http://localhost:8080/api/products");
-        return res.ok ? res.json() : [];
+        const res = await authorizedFetch("/api/products");
+        return res.ok ? res.json() :  showNotification(await res.text(),"error",5000);
     }
 
     async function fetchLogsForUser(userId) {
-        const res = await authorizedFetch(`http://localhost:8080/api/logs/user/${userId}`);
-        return res.ok ? res.json() : [];
+        const res = await authorizedFetch(`/api/logs/user/${userId}`);
+        return res.ok ? res.json() :  showNotification(await res.text(),"error",5000);
     }
 
     async function fetchLogsForProduct(productId) {
-        const res = await authorizedFetch(`http://localhost:8080/api/logs/product/${productId}`);
-        return res.ok ? res.json() : [];
+        const res = await authorizedFetch(`/api/logs/product/${productId}`);
+        return res.ok ? res.json() :  showNotification(await res.text(),"error",5000);
     }
 
     // ------------------- Tabel-rendering -------------------
@@ -122,8 +122,8 @@ export function createShowLogModule() {
 
         // --- Alle logs ---
         if (typeSelect.value === "all") {
-            const res = await authorizedFetch("http://localhost:8080/api/logs");
-            const logs = res.ok ? await res.json() : [];
+            const res = await authorizedFetch("/api/logs");
+            const logs = res.ok ? await res.json() :  showNotification(await res.text(),"error",5000);
             dynamicContainer.appendChild(renderLogs(logs));
             return;
         }

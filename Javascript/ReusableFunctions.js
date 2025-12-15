@@ -20,11 +20,15 @@ export function isTokenExpired() {
 }
 
 export async function authorizedFetch(url, options = {}) {
+
     const token = localStorage.getItem("token");
     const headers = options.headers || {};
     headers["Authorization"] = `Bearer ${token}`;
     headers["Content-Type"] = "application/json";
-    const response = await fetch(url, { ...options, headers });
+
+
+        const response = await fetch("http://localhost:8080"+url, { ...options, headers });
+
     return response;
 }
 
@@ -50,4 +54,35 @@ export function showOverlay(component) {
     document.body.appendChild(overlay);
 
     return overlay; // if caller wants to manually close it later
+}
+
+export function showNotification(message, type = 'info', duration = 3000) {
+    // Create container if it doesn't exist
+    let container = document.getElementById('notification-container');
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'notification-container';
+        document.body.appendChild(container);
+    }
+
+    // Create notification element
+    const notification = document.createElement('div');
+    notification.classList.add('notification', type);
+    notification.textContent = message;
+    container.appendChild(notification);
+
+    // Trigger fade-in
+    requestAnimationFrame(() => notification.classList.add('show'));
+
+    // Remove notification after duration
+    setTimeout(() => {
+        notification.classList.remove('show');
+        notification.addEventListener('transitionend', () => {
+            notification.remove();
+            // If it's an error, reload the page
+            if (type === 'error') {
+                location.reload();
+            }
+        });
+    }, 100000);
 }

@@ -1,4 +1,4 @@
-import { authorizedFetch } from "./ReusableFunctions.js";
+import {authorizedFetch, showNotification} from "./ReusableFunctions.js";
 
 export function createWarehouseModule() {
 
@@ -78,7 +78,7 @@ export function createWarehouseModule() {
 
         try {
             const res = await authorizedFetch(
-                "http://localhost:8080/api/warehouses",
+                "/api/warehouses",
                 {
                     method: "POST",
                     body: JSON.stringify(warehouse)
@@ -86,17 +86,15 @@ export function createWarehouseModule() {
             );
 
             if (!res.ok) {
-                msg.textContent = "Fejl: " + (await res.text());
-                msg.className = "m-message m-error";
-                return;
+            return showNotification(await res.text(),"error",5000);
             }
 
             msg.textContent = "Varehuset blev oprettet!";
             msg.className = "m-message m-success";
 
         } catch (err) {
-            msg.textContent = "Netværksfejl – kunne ikke oprette varehuset.";
-            msg.className = "m-message m-error";
+         showNotification("Netværksfejl - kunne ikke oprette forbindelse til backend","error",5000);
+
             console.error(err);
         }
     });

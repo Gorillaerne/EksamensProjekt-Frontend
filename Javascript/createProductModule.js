@@ -1,4 +1,4 @@
-import { authorizedFetch } from "./ReusableFunctions.js";
+import {authorizedFetch, showNotification} from "./ReusableFunctions.js";
 
 export function createProductModule() {
 
@@ -117,7 +117,7 @@ export function createProductModule() {
 
         try {
             const res = await authorizedFetch(
-                "http://localhost:8080/api/products",
+                "/api/products",
                 {
                     method: "POST",
                     body: JSON.stringify(product)
@@ -125,21 +125,18 @@ export function createProductModule() {
             );
 
             if (!res.ok) {
-                msg.textContent = "Fejl: " + (await res.text());
-                msg.className = "m-message m-error";
-                return;
+               return showNotification(await res.text(),"error",5000)
             }
 
             msg.textContent = "Produktet blev oprettet!";
             msg.className = "m-message m-success";
-            window.setTimeout(()=>{
-                console.log("Delayer lige et sekund")
+
+            setTimeout(() => {
                 location.reload();
-                },800);
+            }, 500);
 
         } catch (err) {
-            msg.textContent = "Netværksfejl – kunne ikke oprette produktet.";
-            msg.className = "m-message m-error";
+            showNotification("Netværksfejl – Kunne ikke oprette forbindelse til backend","error",5000)
             console.error(err);
         }
     });
