@@ -27,7 +27,7 @@ export async function authorizedFetch(url, options = {}) {
     headers["Content-Type"] = "application/json";
 
 
-        const response = await fetch("http://localhost:8080"+url, { ...options, headers });
+        const response = await fetch(""+url, { ...options, headers });
 
     return response;
 }
