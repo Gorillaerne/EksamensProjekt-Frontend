@@ -469,13 +469,13 @@ LOGIN MODULE — MODERN 2025
 
 /* FOOTER */
 .lp-footer {
-    margin-top: 40px;
     background: var(--elvang-brun);
     padding: 40px 60px;
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     gap: 40px;
     border-top: 2px solid #d2cbbf;
+    min-height: calc(10vh - 15px);
 }
 
 .lp-footer-col h4 {

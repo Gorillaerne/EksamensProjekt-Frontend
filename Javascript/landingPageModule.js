@@ -83,29 +83,6 @@ export function createLandingPage() {
     const footer = document.createElement("footer");
     footer.classList.add("lp-footer");
 
-    function createFooterColumn(title, items) {
-        const col = document.createElement("div");
-        col.classList.add("lp-footer-col");
-
-        const h = document.createElement("h4");
-        h.textContent = title;
-        col.appendChild(h);
-
-        items.forEach(i => {
-            const p = document.createElement("p");
-            p.textContent = i;
-            col.appendChild(p);
-        });
-
-        return col;
-    }
-
-    footer.appendChild(createFooterColumn("Elvang", ["Knap", "Knap", "Knap"]));
-    footer.appendChild(createFooterColumn("Kundeservice", ["Knap", "Knap", "Knap"]));
-    footer.appendChild(createFooterColumn("Forhandlere", ["Knap", "Knap", "Knap"]));
-    footer.appendChild(createFooterColumn("Følg os", ["Knap", "Knap", "Knap"]));
-    footer.appendChild(createFooterColumn("Land", ["Knap", "Knap", "Knap"]));
-
     wrapper.appendChild(footer);
 
     return wrapper;
