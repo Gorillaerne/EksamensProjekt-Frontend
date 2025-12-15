@@ -25,7 +25,7 @@ on:
   # push: Kører når commits pushes direkte til main branch.
   # Dette er typisk når en PR merges.
   push:
-    branches: [main]
+    branches: [master]
   # workflow_dispatch: Tillader manuel kørsel fra GitHub's UI.
   # Nyttigt til debugging eller hvis man vil genbygge uden at pushe kode.
   workflow_dispatch:
